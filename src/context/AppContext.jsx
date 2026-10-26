@@ -128,6 +128,25 @@ export const AppProvider = ({ children }) => {
   const [isProfileDrawerOpen, setIsProfileDrawerOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const [isUploadOpen, setIsUploadOpen] = useState(false);
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+
+  // Student Profile State (supports custom registration & demo prefill)
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nif_auth_user');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return {
+      name: 'Khushi Sharma',
+      email: 'khushi.sharma@sasc.campus.edu',
+      rollNo: '21CS042',
+      department: 'Computer Science & Engineering',
+      year: 'Final Year',
+      tier: 'Senior Contributor',
+      streakDays: 12,
+      downloads: 1280
+    };
+  });
 
   // Campus Activity Notifications
   const [notifications, setNotifications] = useState([
@@ -370,38 +389,58 @@ export const AppProvider = ({ children }) => {
       e.stopPropagation();
     }
     const isCurrentlySaved = bookmarks.includes(id);
-    let updated;
+    const targetResource = resources.find(r => r.id === id);
+    const title = targetResource ? targetResource.title : 'Study Note';
+
     if (isCurrentlySaved) {
-      updated = bookmarks.filter(bId => bId !== id);
+      setBookmarks(prev => prev.filter(bId => bId !== id));
       showToast({
         title: 'Removed from Bookmarks',
-        description: 'Resource unpinned from your saved study frames.',
-        type: 'info'
+        description: `"${title}" unpinned from your study frames.`,
+        type: 'info',
+        action: {
+          label: 'Undo',
+          onClick: () => {
+            setBookmarks(prev => (prev.includes(id) ? prev : [...prev, id]));
+            showToast({
+              title: 'Bookmark Restored! 📌',
+              description: `"${title}" returned to your saved frames.`,
+              type: 'pink'
+            });
+          }
+        }
       });
     } else {
-      updated = [...bookmarks, id];
+      setBookmarks(prev => (prev.includes(id) ? prev : [...prev, id]));
       showToast({
         title: 'Frame Pinned to Bookmarks! 📌',
-        description: 'Saved to your library for instant offline revision.',
+        description: `"${title}" saved for instant offline revision.`,
         type: 'pink',
         action: {
-          label: 'View',
-          onClick: () => navigateTo('bookmarks')
+          label: 'Undo',
+          onClick: () => {
+            setBookmarks(prev => prev.filter(bId => bId !== id));
+            showToast({
+              title: 'Bookmark Unpinned',
+              description: `"${title}" removed from saved frames.`,
+              type: 'info'
+            });
+          }
         }
       });
     }
-    setBookmarks(updated);
   };
 
   // Collection Handlers
-  const createCollection = (name, description, tapeColor = 'blue') => {
+  const createCollection = (name, description, tapeColor = 'blue', extra = {}) => {
     const newCol = {
       id: `col-${Date.now()}`,
       name: name.trim() || 'Untitled Collection',
       description: description.trim() || 'Custom study collection',
       resourceIds: [],
       tapeColor,
-      createdAt: new Date().toISOString().split('T')[0]
+      createdAt: new Date().toISOString().split('T')[0],
+      ...extra
     };
     setCollections(prev => [newCol, ...prev]);
     showToast({
@@ -593,19 +632,25 @@ Campus Notes Hub Challenge - SASC PixelRush
     });
   };
 
-  const loginUser = () => {
+  const loginUser = (customProfile = null) => {
     try {
       localStorage.removeItem('nif_auth_logged_out');
+      if (customProfile) {
+        localStorage.setItem('nif_auth_user', JSON.stringify(customProfile));
+        setCurrentUser(customProfile);
+      }
     } catch (e) {
       console.warn('LocalStorage error clearing auth state', e);
     }
     setIsLoggedOut(false);
+    setIsAuthModalOpen(false);
     setCurrentView('home');
     setHistoryStack(['home']);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    const studentName = customProfile?.name || currentUser?.name || 'Khushi';
     showToast({
-      title: 'Welcome Back, Khushi! 👋',
-      description: 'Senior Contributor profile, 1,280 downloads & 12d streak restored.',
+      title: `Welcome, ${studentName}! 🎓`,
+      description: 'Your campus study workstation is active and synchronized.',
       type: 'success'
     });
   };
@@ -628,6 +673,10 @@ Campus Notes Hub Challenge - SASC PixelRush
         isFilterSheetOpen,
         isProfileDrawerOpen,
         isNotificationOpen,
+        isAuthModalOpen,
+        setIsAuthModalOpen,
+        currentUser,
+        setCurrentUser,
         notifications,
         unreadNotificationsCount,
         isLoggedOut,

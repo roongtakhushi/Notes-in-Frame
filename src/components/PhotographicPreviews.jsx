@@ -3,7 +3,8 @@ import React from 'react';
 // Photographic previews that look like real physical study notes & campus photos
 // Complies with strict rules: Photography motifs only, ZERO botanical elements.
 
-export const HandwrittenNotesPreview = ({ title, type = 'notes', accentColor = '#407ADD' }) => {
+export const HandwrittenNotesPreview = ({ title = 'Campus Study Notes', type = 'notes', accentColor = '#407ADD' }) => {
+  const safeTitle = (title || 'Campus Study Notes').slice(0, 22);
   return (
     <div style={{
       width: '100%',
@@ -42,7 +43,7 @@ export const HandwrittenNotesPreview = ({ title, type = 'notes', accentColor = '
         overflow: 'hidden',
         textOverflow: 'ellipsis'
       }}>
-        {title.slice(0, 22)}
+        {safeTitle}
       </div>
 
       {/* Handwritten Equations & Text lines */}

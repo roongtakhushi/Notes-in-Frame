@@ -19,14 +19,10 @@ const FourPointStar = ({ size = 16, color = '#DD88C1', className = '' }) => (
 );
 
 export const LandingView = () => {
-  const { navigateTo, isLoggedOut, loginUser } = useApp();
+  const { navigateTo, isLoggedOut, setIsAuthModalOpen } = useApp();
 
   const handleGetStarted = () => {
-    if (isLoggedOut) {
-      loginUser();
-    } else {
-      navigateTo('onboarding');
-    }
+    setIsAuthModalOpen(true);
   };
 
   const line1 = "notes";

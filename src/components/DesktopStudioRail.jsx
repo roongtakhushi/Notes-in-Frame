@@ -1,10 +1,50 @@
-import React from 'react';
-import { Flame, Calendar, ArrowRight, Bookmark, Sparkles, TrendingUp, Award, ExternalLink, ChevronRight } from 'lucide-react';
+import React, { useState } from 'react';
+import {
+  Flame,
+  Calendar,
+  ArrowRight,
+  Bookmark,
+  Sparkles,
+  TrendingUp,
+  Award,
+  ExternalLink,
+  ChevronRight,
+  Clock,
+  PlusCircle,
+  CheckCircle2
+} from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { StudentAvatar } from './StudentAvatar';
 
 export const DesktopStudioRail = () => {
-  const { navigateTo, bookmarks, resources, openNoteDetail, setIsProfileDrawerOpen } = useApp();
+  const { navigateTo, bookmarks, resources, openNoteDetail, setIsProfileDrawerOpen, showToast } = useApp();
+
+  // Weekly study hours goal state
+  const [studyHours, setStudyHours] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nif_study_hours');
+      return saved ? parseInt(saved, 10) : 14;
+    } catch (e) {
+      return 14;
+    }
+  });
+
+  const TARGET_HOURS = 20;
+  const progressPercent = Math.min(100, Math.round((studyHours / TARGET_HOURS) * 100));
+
+  const handleLogHour = () => {
+    const nextHours = studyHours + 1;
+    setStudyHours(nextHours);
+    try {
+      localStorage.setItem('nif_study_hours', String(nextHours));
+    } catch (e) {}
+
+    showToast({
+      title: 'Study Session Logged! ⏱️',
+      description: `+1 Hour recorded. You've completed ${nextHours} of ${TARGET_HOURS} hours this week.`,
+      type: 'success'
+    });
+  };
 
   // Bookmarked resource items for quick access
   const bookmarkedItems = resources.filter(r => bookmarks.includes(r.id)).slice(0, 3);
@@ -92,7 +132,45 @@ export const DesktopStudioRail = () => {
         </button>
       </div>
 
-      {/* 3. Quick-Access Pinned Bookmarks Dock */}
+      {/* 3. Weekly Study Goal Progress Widget */}
+      <div className="studio-card studio-goal-card">
+        <div className="studio-card-top-tape tape-green" />
+        <div className="studio-widget-title-row">
+          <div className="widget-icon-box green-box">
+            <Clock size={17} color="#89BC62" />
+          </div>
+          <div>
+            <h4 className="studio-widget-title">Weekly Study Goal</h4>
+            <span className="studio-widget-sub">Semester 4 Target</span>
+          </div>
+          <span className="goal-pct-chip">{progressPercent}%</span>
+        </div>
+
+        <div className="goal-progress-wrap">
+          <div className="goal-stats-row">
+            <span className="goal-hours-bold">{studyHours} hrs</span>
+            <span className="goal-target-sub">of {TARGET_HOURS} hrs target</span>
+          </div>
+
+          <div className="goal-progress-bar">
+            <div
+              className="goal-progress-fill"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+        </div>
+
+        <button
+          className="btn-log-session tactile-btn"
+          onClick={handleLogHour}
+          title="Log 1 hour of study time"
+        >
+          <PlusCircle size={15} />
+          <span>Log 1h Study Session</span>
+        </button>
+      </div>
+
+      {/* 4. Quick-Access Pinned Bookmarks Dock */}
       <div className="studio-card studio-bookmarks-widget">
         <div className="studio-card-top-tape tape-pink" />
         <div className="studio-widget-title-row">
@@ -104,7 +182,7 @@ export const DesktopStudioRail = () => {
             <span className="studio-widget-sub">{bookmarks.length} saved resources</span>
           </div>
           <button
-            className="btn-text-link"
+            className="btn-text-link tactile-btn"
             onClick={() => navigateTo('collections')}
           >
             All
@@ -134,7 +212,7 @@ export const DesktopStudioRail = () => {
         </div>
       </div>
 
-      {/* 4. Live Campus Community Pulse */}
+      {/* 5. Live Campus Community Pulse */}
       <div className="studio-card studio-pulse-card">
         <div className="studio-widget-title-row">
           <div className="widget-icon-box green-box">

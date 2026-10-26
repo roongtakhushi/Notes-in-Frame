@@ -64,27 +64,50 @@ export const ExamRescueView = () => {
     const currentTask = tasks.find(t => t.id === id);
     if (!currentTask) return;
 
-    const nextState = !currentTask.completed;
-    const updatedTasks = tasks.map(t => t.id === id ? { ...t, completed: nextState } : t);
-    const nextCompletedCount = updatedTasks.filter(t => t.completed).length;
+    const nextCompleted = !currentTask.completed;
 
-    setTasks(updatedTasks);
+    // 1. Update tasks state
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: nextCompleted } : t));
 
-    if (nextState) {
+    // 2. Completed count calculation
+    const nextCompletedCount = tasks.filter(t => t.id === id ? nextCompleted : t.completed).length;
+
+    // 3. Trigger toast feedback in event handler
+    if (nextCompleted) {
       showToast({
         title: 'Revision Task Completed! 🎉',
         description: `"${currentTask.text}" checked off. (${nextCompletedCount}/${tasks.length} tasks ready)`,
         type: 'success',
+        duration: 8000,
         action: {
           label: 'Undo',
-          onClick: () => handleToggleTask(id)
+          onClick: () => {
+            setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: false } : t));
+            showToast({
+              title: 'Task Restored ↩️',
+              description: `"${currentTask.text}" moved back to active checklist.`,
+              type: 'info'
+            });
+          }
         }
       });
     } else {
       showToast({
         title: 'Task Unchecked',
         description: `"${currentTask.text}" moved back to active checklist.`,
-        type: 'info'
+        type: 'info',
+        duration: 8000,
+        action: {
+          label: 'Undo',
+          onClick: () => {
+            setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: true } : t));
+            showToast({
+              title: 'Task Completed! 🎉',
+              description: `"${currentTask.text}" checked off.`,
+              type: 'success'
+            });
+          }
+        }
       });
     }
   };

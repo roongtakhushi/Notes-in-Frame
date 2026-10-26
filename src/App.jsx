@@ -6,6 +6,7 @@ import { ToastContainer } from './components/Toast';
 import { ProfileDrawer } from './components/ProfileDrawer';
 import { NotificationDrawer } from './components/NotificationDrawer';
 import { FilterSheet } from './components/FilterSheet';
+import { StudentAuthModal } from './components/StudentAuthModal';
 
 // Views
 import { LandingView } from './views/LandingView';
@@ -87,6 +88,9 @@ const AppContent = () => {
         filters={exploreFilters}
         onApply={(updated) => setExploreFilters(updated)}
       />
+
+      {/* Student Authentication Modal (Sign In / Register) */}
+      <StudentAuthModal />
 
       {/* Floating Interactive Toast Feedback */}
       <ToastContainer />
