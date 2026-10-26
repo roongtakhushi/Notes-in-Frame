@@ -19,7 +19,12 @@ import {
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { PolaroidCard } from '../components/PolaroidCard';
-import { FilmStripDecoration, CampusBuildingPreview, HandwrittenNotesPreview } from '../components/PhotographicPreviews';
+import {
+  FilmStripDecoration,
+  CampusBuildingPreview,
+  HandwrittenNotesPreview,
+  CollectionsFilmStripRunner
+} from '../components/PhotographicPreviews';
 
 export const CollectionsView = () => {
   const {
@@ -186,6 +191,13 @@ export const CollectionsView = () => {
         </div>
 
         <div className="banner-corkboard-metrics">
+          <div className="banner-film-badge" aria-label="35mm Film Archive">
+            <span className="film-badge-reel">🎞️</span>
+            <div className="film-badge-text">
+              <span className="film-badge-title">35mm Roll #04</span>
+              <span className="film-badge-sub">{allDisplayAlbums.length} Decks Mounted</span>
+            </div>
+          </div>
           <div className="corkboard-metric-card">
             <span className="metric-num">{allDisplayAlbums.length}</span>
             <span className="metric-label">Active Albums</span>
@@ -298,10 +310,15 @@ export const CollectionsView = () => {
 
           {activeTab === 'collections' ? (
             <div className="collections-stage">
-              {/* Decorative Film Strip Accent */}
-              <div className="collections-film-accent" aria-hidden="true">
-                <FilmStripDecoration vertical style={{ height: '320px', width: '28px' }} />
-              </div>
+              {/* Neatly Placed 35mm Negative Contact Runner Framing the Albums */}
+              <CollectionsFilmStripRunner
+                albums={allDisplayAlbums}
+                selectedColId={selectedColId}
+                onSelectAlbum={(album) => {
+                  const matchCol = collections.find(c => c.id === album.id || c.name.toLowerCase().includes(album.title.toLowerCase())) || collections[0];
+                  setSelectedColId(matchCol?.id || album.id);
+                }}
+              />
 
               {/* Responsive Corkboard Albums Grid (2 cols mobile, 3-4 cols desktop) */}
               <div className="corkboard-responsive-grid">

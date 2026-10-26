@@ -3287,12 +3287,230 @@ img, svg {
   position: relative;
 }
 
+/* Legacy film accent removed in favor of neat CollectionsFilmStripRunner */
 .collections-film-accent {
+  display: none !important;
+}
+
+/* =========================================================
+   35mm NEGATIVE FILM CONTACT RUNNER (Authentic Photographic Metaphor)
+   Neatly frames the corkboard decks above the album cards without ever clipping
+   ========================================================= */
+.collections-film-runner-wrap {
+  position: relative;
+  width: 100%;
+  margin: 0.5rem 0 1.5rem;
+}
+
+/* Left & Right Tactile Washi Tape Anchors */
+.film-runner-tape {
   position: absolute;
-  left: -12px;
-  top: 40px;
-  transform: rotate(-8deg);
-  z-index: 1;
+  top: -6px;
+  width: 32px;
+  height: 14px;
+  border-radius: 2px;
+  pointer-events: none;
+  z-index: 3;
+}
+.film-runner-tape.tape-left {
+  left: 14px;
+  background: rgba(254, 243, 199, 0.85);
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  transform: rotate(-3deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+.film-runner-tape.tape-right {
+  right: 14px;
+  background: rgba(219, 234, 254, 0.85);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  transform: rotate(3deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.collections-film-runner {
+  background: linear-gradient(180deg, #090D16 0%, #111827 50%, #090D16 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  padding: 5px 10px;
+  box-shadow: 0 4px 16px -2px rgba(9, 13, 22, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Double Sprocket Perforation Tracks (Top & Bottom) */
+.film-sprocket-track {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  height: 6px;
+  overflow: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+.sprocket-hole {
+  display: inline-block;
+  width: 8px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.82);
+  border-radius: 1px;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.45);
+}
+
+/* Central 35mm Negative Emulsion Body */
+.film-negative-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 2px 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.film-header-mark {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.film-reel-icon {
+  font-size: 0.875rem;
+  line-height: 1;
+}
+.film-brand-code {
+  font-size: 0.65625rem;
+  font-weight: 800;
+  color: #F59E0B;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+/* Interactive Frame Chips matching active albums */
+.film-frames-carousel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 0;
+  flex: 1;
+}
+.film-frames-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.film-frame-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px dashed rgba(245, 158, 11, 0.35);
+  border-radius: 4px;
+  color: #FDE68A;
+  font-family: inherit;
+  font-size: 0.65625rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+.film-frame-chip:hover {
+  background: rgba(245, 158, 11, 0.14);
+  border-color: #F59E0B;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+.film-frame-chip.is-active {
+  background: rgba(64, 122, 221, 0.35);
+  border-color: #60A5FA;
+  color: #EFF6FF;
+}
+.film-frame-arrow {
+  font-size: 0.5625rem;
+  color: #F59E0B;
+}
+.film-frame-index {
+  color: #60A5FA;
+}
+.film-frame-label {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.film-frame-tag {
+  font-size: 0.5625rem;
+  padding: 1px 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  color: #94A3B8;
+}
+
+.film-footer-mark {
+  flex-shrink: 0;
+}
+.film-exp-code {
+  font-size: 0.625rem;
+  font-weight: 700;
+  color: #94A3B8;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .film-brand-code {
+    display: none;
+  }
+  .film-footer-mark {
+    display: none;
+  }
+  .film-negative-strip {
+    gap: 6px;
+    padding: 1px 2px;
+  }
+  .film-frame-label {
+    max-width: 85px;
+  }
+}
+
+/* Banner 35mm Roll Chip */
+.banner-film-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: #0F172A;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.25);
+}
+.film-badge-reel {
+  font-size: 1.15rem;
+  line-height: 1;
+}
+.film-badge-text {
+  display: flex;
+  flex-direction: column;
+}
+.film-badge-title {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: #F59E0B;
+  line-height: 1.1;
+  letter-spacing: 0.3px;
+}
+.film-badge-sub {
+  font-size: 0.625rem;
+  color: #94A3B8;
+  font-weight: 600;
 }
 
 .albums-2x2-grid {
@@ -3310,6 +3528,7 @@ img, svg {
   padding: 10px 8px 12px;
   box-shadow: 0 8px 20px -4px rgba(17, 24, 39, 0.1);
   position: relative;
+  z-index: 2;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -3329,7 +3548,7 @@ img, svg {
   height: 14px;
   border-radius: 50%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25);
-  z-index: 3;
+  z-index: 4;
 }
 
 .pushpin-head.pin-blue {
@@ -3359,19 +3578,23 @@ img, svg {
   z-index: 3;
 }
 
-.album-photo-box {
+.album-photo-box,
+.album-photo-canvas {
   width: 100%;
-  height: 110px;
-  border-radius: 4px;
+  height: 114px;
+  border-radius: 6px;
   overflow: hidden;
   border: 1px solid #E2E8F0;
   margin-bottom: 8px;
+  background: #FAF8F5;
+  position: relative;
 }
 
 .album-caption-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 8px;
 }
 
 .album-title {
@@ -3382,7 +3605,7 @@ img, svg {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 110px;
+  max-width: 150px;
 }
 
 .album-count {
@@ -5722,6 +5945,11 @@ body.paper-texture-mode {
   .corkboard-responsive-grid {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 1.5rem !important;
+  }
+
+  .album-title {
+    max-width: 100% !important;
+    font-size: 0.9375rem !important;
   }
 }
 

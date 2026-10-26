@@ -177,3 +177,69 @@ export const FilmStripDecoration = ({ vertical = false, style = {} }) => {
     </div>
   );
 };
+
+// Authentic 35mm Photographic Negative Contact Sheet Runner
+// Placed neatly above study collection decks with realistic sprocket holes,
+// vintage film markings (KODAK SAFETY FILM 400), and interactive frame indicators.
+export const CollectionsFilmStripRunner = ({
+  albums = [],
+  selectedColId = null,
+  onSelectAlbum = null
+}) => {
+  return (
+    <div className="collections-film-runner-wrap" aria-label="35mm Negative Contact Runner">
+      {/* Tactile Washi Tape Anchors on Ends */}
+      <span className="film-runner-tape tape-left" aria-hidden="true" />
+      <span className="film-runner-tape tape-right" aria-hidden="true" />
+
+      <div className="collections-film-runner">
+        {/* Top Sprocket Perforations Track */}
+        <div className="film-sprocket-track track-top" aria-hidden="true">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <span key={`top-${i}`} className="sprocket-hole" />
+          ))}
+        </div>
+
+        {/* Central 35mm Negative Emulsion Strip */}
+        <div className="film-negative-strip">
+          <div className="film-header-mark">
+            <span className="film-reel-icon">🎞️</span>
+            <span className="film-brand-code">35mm KODAK SAFETY FILM 400</span>
+          </div>
+
+          <div className="film-frames-carousel">
+            {albums.map((album, idx) => {
+              const frameNum = String(idx + 1).padStart(2, '0');
+              const isActive = selectedColId === album.id;
+              return (
+                <button
+                  key={album.id || idx}
+                  type="button"
+                  className={`film-frame-chip ${isActive ? 'is-active' : ''}`}
+                  onClick={() => onSelectAlbum?.(album)}
+                  title={`Open Deck: ${album.title}`}
+                >
+                  <span className="film-frame-arrow">▶</span>
+                  <span className="film-frame-index">{frameNum}A</span>
+                  <span className="film-frame-label">{album.title}</span>
+                  <span className="film-frame-tag">{album.department || 'DECK'}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="film-footer-mark">
+            <span className="film-exp-code">EXP 36 • ARCHIVE</span>
+          </div>
+        </div>
+
+        {/* Bottom Sprocket Perforations Track */}
+        <div className="film-sprocket-track track-bottom" aria-hidden="true">
+          {Array.from({ length: 36 }).map((_, i) => (
+            <span key={`btm-${i}`} className="sprocket-hole" />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
