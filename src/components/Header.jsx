@@ -1,5 +1,5 @@
-import React from 'react';
-import { Camera, Plus, Bell } from 'lucide-react';
+import React, { useEffect } from 'react';
+import { Camera, Plus, Bell, Flame, Search } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { StudentAvatar } from './StudentAvatar';
 
@@ -12,6 +12,24 @@ export const Header = () => {
     setIsNotificationOpen,
     unreadNotificationsCount
   } = useApp();
+
+  // Global Ctrl+K / Cmd+K Search Shortcut
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+        e.preventDefault();
+        if (currentView !== 'home' && currentView !== 'explore') {
+          navigateTo('explore');
+        }
+        setTimeout(() => {
+          const input = document.querySelector('.search-input');
+          input?.focus();
+        }, 60);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentView, navigateTo]);
 
   // Hide top header on landing and onboarding to match Screens 1 & 2
   if (['landing', 'onboarding'].includes(currentView)) {
@@ -72,8 +90,37 @@ export const Header = () => {
           </button>
         </nav>
 
+        {/* Desktop Header Quick Search Trigger */}
+        <button
+          className="header-search-trigger tactile-btn"
+          onClick={() => {
+            if (currentView !== 'home' && currentView !== 'explore') {
+              navigateTo('explore');
+            }
+            setTimeout(() => {
+              const input = document.querySelector('.search-input');
+              input?.focus();
+            }, 60);
+          }}
+          title="Search study materials (⌘K / Ctrl+K)"
+        >
+          <Search size={14} className="search-icon-dim" />
+          <span className="search-placeholder-text">Quick search...</span>
+          <span className="kbd-shortcut-hint">⌘K</span>
+        </button>
+
         {/* Header Action Controls */}
         <div className="header-actions">
+          {/* Active 12-Day Streak Pill */}
+          <div
+            className="header-streak-pill tactile-btn"
+            onClick={() => setIsProfileDrawerOpen(true)}
+            title="12-Day Active Study Streak 🔥 Click to open profile"
+          >
+            <Flame size={15} color="#EA580C" />
+            <span className="streak-num">12d</span>
+          </div>
+
           {/* Upload Button */}
           <button
             className="btn-upload-desktop"
