@@ -4,6 +4,69 @@ import { useApp } from '../context/AppContext';
 import { PolaroidCard } from '../components/PolaroidCard';
 import { DesktopStudioRail } from '../components/DesktopStudioRail';
 
+const DEPARTMENTS = [
+  {
+    id: 'cse',
+    name: 'Computer Science',
+    shortName: 'CSE',
+    code: 'CS-01',
+    notesCount: 14,
+    icon: Monitor,
+    tapeColor: 'green',
+    filterQuery: 'CS'
+  },
+  {
+    id: 'ece',
+    name: 'Electronics',
+    shortName: 'ECE',
+    code: 'EC-02',
+    notesCount: 8,
+    icon: Cpu,
+    tapeColor: 'pink',
+    filterQuery: 'Signals'
+  },
+  {
+    id: 'mech',
+    name: 'Mechanical',
+    shortName: 'MECH',
+    code: 'ME-03',
+    notesCount: 6,
+    icon: Settings,
+    tapeColor: 'blue',
+    filterQuery: 'Thermodynamics'
+  },
+  {
+    id: 'civil',
+    name: 'Civil Engineering',
+    shortName: 'CIVIL',
+    code: 'CE-04',
+    notesCount: 5,
+    icon: Landmark,
+    tapeColor: 'purple',
+    filterQuery: 'Civil'
+  },
+  {
+    id: 'it',
+    name: 'Information Tech',
+    shortName: 'IT',
+    code: 'IT-05',
+    notesCount: 9,
+    icon: Database,
+    tapeColor: 'orange',
+    filterQuery: 'DBMS'
+  },
+  {
+    id: 'math',
+    name: 'Applied Maths',
+    shortName: 'MATH',
+    code: 'AM-06',
+    notesCount: 11,
+    icon: Calculator,
+    tapeColor: 'amber',
+    filterQuery: 'Maths'
+  }
+];
+
 export const HomeView = () => {
   const { resources, navigateTo, setExploreFilters } = useApp();
   const [searchQuery, setSearchQuery] = useState('');
@@ -164,9 +227,12 @@ export const HomeView = () => {
           </section>
 
           {/* 5. Subjects Bento Section (Screen 3) */}
-          <section className="home-section-subjects">
+          <section className="home-section-subjects" aria-label="Explore by Department">
             <div className="home-section-header">
-              <h2 className="home-section-title">Explore by Department</h2>
+              <div className="section-title-wrap">
+                <span className="section-film-badge" aria-hidden="true">🎞️ ARCHIVE</span>
+                <h2 className="home-section-title">Explore by Department</h2>
+              </div>
               <button
                 className="home-see-all-link tactile-btn"
                 onClick={() => handleSeeAll()}
@@ -176,89 +242,46 @@ export const HomeView = () => {
             </div>
 
             <div className="home-subjects-bento-grid">
-              {/* CSE */}
-              <div
-                className="subject-card card-cse tactile-btn"
-                onClick={() => handleSeeAll({ subject: 'Machine Learning' })}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="subject-icon-box">
-                  <Monitor size={22} strokeWidth={2.2} />
-                </div>
-                <span className="subject-name">Computer Science</span>
-                <span className="subject-count-tag">14 Notes</span>
-              </div>
+              {DEPARTMENTS.map((dept) => {
+                const IconComponent = dept.icon;
+                return (
+                  <article
+                    key={dept.id}
+                    className={`department-slide-mount mount-${dept.tapeColor} tactile-btn`}
+                    onClick={() => handleSeeAll({ query: dept.filterQuery, subject: 'All' })}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Explore ${dept.name} notes (${dept.notesCount} available)`}
+                  >
+                    {/* Top Tactile Washi Tape Index Tab */}
+                    <span className={`slide-washi-tape tape-${dept.tapeColor}`} aria-hidden="true" />
 
-              {/* ECE */}
-              <div
-                className="subject-card card-ece tactile-btn"
-                onClick={() => handleSeeAll({ subject: 'Signals & Systems' })}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="subject-icon-box">
-                  <Cpu size={22} strokeWidth={2.2} />
-                </div>
-                <span className="subject-name">Electronics</span>
-                <span className="subject-count-tag">8 Notes</span>
-              </div>
+                    {/* Registration Mark in Corner (Photographic 35mm Mount Accent) */}
+                    <span className="slide-reg-mark" aria-hidden="true">+</span>
 
-              {/* Mech */}
-              <div
-                className="subject-card card-mech tactile-btn"
-                onClick={() => handleSeeAll({ subject: 'Thermodynamics' })}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="subject-icon-box">
-                  <Settings size={22} strokeWidth={2.2} />
-                </div>
-                <span className="subject-name">Mechanical</span>
-                <span className="subject-count-tag">6 Notes</span>
-              </div>
+                    {/* Top Row: Camera Lens Aperture Icon + Dept Code Stamp */}
+                    <div className="slide-card-top">
+                      <div className={`slide-lens-aperture aperture-${dept.tapeColor}`}>
+                        <IconComponent size={19} strokeWidth={2.2} />
+                      </div>
+                      <span className="slide-dept-code">{dept.code}</span>
+                    </div>
 
-              {/* Civil */}
-              <div
-                className="subject-card card-civil tactile-btn"
-                onClick={() => handleSeeAll({ subject: 'Engineering Maths' })}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="subject-icon-box">
-                  <Landmark size={22} strokeWidth={2.2} />
-                </div>
-                <span className="subject-name">Civil Engineering</span>
-                <span className="subject-count-tag">5 Notes</span>
-              </div>
+                    {/* Department Title */}
+                    <div className="slide-card-body">
+                      <h3 className="slide-dept-name">{dept.name}</h3>
+                    </div>
 
-              {/* Information Tech */}
-              <div
-                className="subject-card card-it tactile-btn"
-                onClick={() => handleSeeAll({ subject: 'Database Management Systems (DBMS)' })}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="subject-icon-box">
-                  <Database size={22} strokeWidth={2.2} />
-                </div>
-                <span className="subject-name">Information Tech</span>
-                <span className="subject-count-tag">9 Notes</span>
-              </div>
-
-              {/* Applied Maths */}
-              <div
-                className="subject-card card-math tactile-btn"
-                onClick={() => handleSeeAll({ subject: 'Engineering Mathematics' })}
-                role="button"
-                tabIndex={0}
-              >
-                <div className="subject-icon-box">
-                  <Calculator size={22} strokeWidth={2.2} />
-                </div>
-                <span className="subject-name">Applied Maths</span>
-                <span className="subject-count-tag">11 Notes</span>
-              </div>
+                    {/* Footnote: Notes Counter Pill */}
+                    <div className="slide-card-foot">
+                      <span className="slide-count-pill">
+                        <span className="count-dot" aria-hidden="true" />
+                        {dept.notesCount} Notes
+                      </span>
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </section>
         </div>

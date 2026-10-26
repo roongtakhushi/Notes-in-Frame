@@ -19,10 +19,12 @@ export const ExploreView = () => {
   const filteredResources = resources.filter(resource => {
     if (exploreFilters.query) {
       const q = exploreFilters.query.toLowerCase().trim();
-      const matchTitle = resource.title.toLowerCase().includes(q);
-      const matchSubject = resource.subject.toLowerCase().includes(q);
+      const matchTitle = resource.title?.toLowerCase().includes(q);
+      const matchSubject = resource.subject?.toLowerCase().includes(q);
       const matchTopic = resource.unitOrTopic?.toLowerCase().includes(q);
-      if (!matchTitle && !matchSubject && !matchTopic) return false;
+      const matchCode = resource.subjectCode?.toLowerCase().includes(q);
+      const matchTags = resource.tags?.some(t => t.toLowerCase().includes(q));
+      if (!matchTitle && !matchSubject && !matchTopic && !matchCode && !matchTags) return false;
     }
     if (exploreFilters.subject !== 'All' && resource.subject !== exploreFilters.subject) {
       return false;
