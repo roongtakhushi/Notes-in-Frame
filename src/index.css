@@ -6308,6 +6308,7 @@ body.paper-texture-mode {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
     gap: 1.5rem !important;
+    min-height: 520px;
   }
 }
 
@@ -7218,3 +7219,636 @@ body.paper-texture-mode {
   display: block;
 }
 
+
+
+/* =========================================================
+   8. TACTILE PRODUCTION PAGINATION COMPONENT
+   ========================================================= */
+.pagination-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 2.25rem 0 1rem;
+  padding: 14px 20px;
+  background: #FFFDF8;
+  border: 1.5px solid #1A1A1A;
+  border-radius: 12px;
+  box-shadow: 2px 2px 0px #1A1A1A;
+  min-height: 48px;
+}
+
+@media (min-width: 640px) {
+  .pagination-bar {
+    flex-direction: row;
+  }
+}
+
+.pagination-range-text {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.75rem;
+  color: #4B5563;
+  letter-spacing: 0.02em;
+}
+
+.pagination-range-text strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pagination-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1.5px solid #1A1A1A;
+  background: #FFFFFF;
+  color: #111827;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  min-height: 36px;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: #F3F4F6;
+  transform: translateY(-1px);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  border-color: #D1D5DB;
+  color: #9CA3AF;
+}
+
+.pagination-pill {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1.5px solid #1A1A1A;
+  background: #FFFFFF;
+  color: #111827;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.pagination-pill:hover:not(.active) {
+  background: #F3F4F6;
+  transform: translateY(-1px);
+}
+
+.pagination-pill.active {
+  background: var(--color-green, #89BC62);
+  color: #FFFFFF;
+  box-shadow: 1px 1px 0px #1A1A1A;
+}
+
+/* =========================================================
+   9. EXPLORE VIEW: HORIZONTAL STUDIO FILTER DOCK
+   ========================================================= */
+.explore-desktop-filter-dock {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .explore-desktop-filter-dock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: #FFFFFF;
+    border: 1.5px solid var(--border-light);
+    border-radius: 14px;
+    padding: 16px 20px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 14px -2px rgba(17, 24, 39, 0.05);
+  }
+
+  .dock-top-row,
+  .dock-middle-row,
+  .dock-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+  }
+
+  .dock-group-left,
+  .dock-middle-row,
+  .dock-type-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .dock-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 105px;
+  }
+
+  .dock-pills-flex {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .dock-pill-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    background: var(--surface-warm);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    min-height: 30px;
+  }
+
+  .dock-pill-btn:hover {
+    background: #F3F4F6;
+    color: var(--text-primary);
+    border-color: #D1D5DB;
+  }
+
+  .dock-pill-btn.active {
+    background: #111827;
+    color: #FFFFFF;
+    border-color: #111827;
+    font-weight: 700;
+  }
+
+  .pill-check {
+    color: var(--color-green);
+  }
+
+  .btn-dock-reset {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.71875rem;
+    color: var(--text-muted);
+    background: none;
+    border: 1px solid transparent;
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+
+  .btn-dock-reset:hover {
+    color: #EF4444;
+    background: #FEF2F2;
+    border-color: #FEE2E2;
+  }
+
+  .dock-action-bar {
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-light);
+  }
+
+  .dock-sort-and-cta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;
+  }
+
+  .dock-sort-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 10px;
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    background: #FFFFFF;
+  }
+
+  .dock-sort-select {
+    border: none;
+    background: transparent;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    outline: none;
+    cursor: pointer;
+    padding: 4px 0;
+  }
+
+  .btn-dock-contribute {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    background: var(--color-green, #89BC62);
+    color: #FFFFFF;
+    border: 1.5px solid #1A1A1A;
+    box-shadow: 1.5px 1.5px 0px #1A1A1A;
+    font-size: 0.78125rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    white-space: nowrap;
+    min-height: 32px;
+  }
+
+  .btn-dock-contribute:hover {
+    transform: translateY(-1px);
+    box-shadow: 2.5px 2.5px 0px #1A1A1A;
+  }
+}
+
+/* =========================================================
+   10. HOME VIEW: STUDIO BENTO COCKPIT DOCK
+   ========================================================= */
+.home-studio-bento-dock {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  margin: 1.25rem 0 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .home-studio-bento-dock {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-studio-bento-dock {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.cockpit-card {
+  position: relative;
+  background: #FFFFFF;
+  border: 1.5px solid #1A1A1A;
+  border-radius: 14px;
+  padding: 16px 18px 14px;
+  box-shadow: 2px 2px 0px #1A1A1A;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cockpit-tape {
+  position: absolute;
+  top: -8px;
+  left: 20px;
+  width: 50px;
+  height: 14px;
+}
+
+.cockpit-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cockpit-avatar-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cockpit-student-name {
+  font-size: 0.9375rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.cockpit-student-badge {
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+}
+
+.cockpit-profile-link {
+  font-size: 0.71875rem;
+  font-weight: 700;
+  color: var(--color-blue);
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.cockpit-streak-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cockpit-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+}
+
+.cockpit-pill.flame-pill {
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  color: #C2410C;
+}
+
+.cockpit-pill.downloads-pill {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+}
+
+.cockpit-goal-box {
+  background: var(--surface-warm);
+  border: 1px solid var(--border-light);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.goal-box-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.71875rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+.goal-bar-track {
+  width: 100%;
+  height: 6px;
+  background: #E5E7EB;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.goal-bar-fill {
+  height: 100%;
+  background: var(--color-green, #89BC62);
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+.btn-cockpit-log {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.btn-cockpit-log:hover {
+  background: #F3F4F6;
+  border-color: #9CA3AF;
+}
+
+.cockpit-title-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cockpit-icon-wrap {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cockpit-icon-wrap.blue-wrap { background: #EFF6FF; }
+.cockpit-icon-wrap.pink-wrap { background: #FDF2F8; }
+.cockpit-icon-wrap.green-wrap { background: #F0FDF4; }
+
+.cockpit-card-title {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.cockpit-card-sub {
+  font-size: 0.6875rem;
+  color: var(--text-muted);
+}
+
+.cockpit-badge-chip {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: #D97706;
+  background: #FEF3C7;
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid #FDE68A;
+}
+
+.cockpit-exam-body {
+  margin: 10px 0 14px;
+}
+
+.exam-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.exam-subj-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.exam-pct-badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-blue);
+}
+
+.exam-mini-track {
+  width: 100%;
+  height: 6px;
+  background: #EFF6FF;
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.exam-mini-fill {
+  height: 100%;
+  background: var(--color-blue);
+  border-radius: 9999px;
+}
+
+.exam-next-step {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.6875rem;
+  color: var(--text-secondary);
+}
+
+.btn-cockpit-resume {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: var(--color-blue);
+  color: #FFFFFF;
+  border: 1.5px solid #1A1A1A;
+  border-radius: 8px;
+  box-shadow: 1.5px 1.5px 0px #1A1A1A;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.btn-cockpit-resume:hover {
+  transform: translateY(-1px);
+}
+
+.btn-cockpit-all {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.71875rem;
+  font-weight: 700;
+  color: var(--color-blue);
+  background: #EFF6FF;
+  border: 1px solid #DBEAFE;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.cockpit-bookmarks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.cockpit-bookmark-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  background: var(--surface-warm);
+  border: 1px solid var(--border-light);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.cockpit-bookmark-row:hover {
+  background: #F3F4F6;
+  border-color: #D1D5DB;
+}
+
+.bookmark-row-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.bookmark-type-tag {
+  font-size: 0.625rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #BE185D;
+  background: #FCE7F3;
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.bookmark-row-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cockpit-pulse-footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-light);
+}
+
+.pulse-live-text {
+  font-size: 0.65rem;
+  color: var(--text-secondary);
+}
+
+.home-notes-counter {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-left: 10px;
+}

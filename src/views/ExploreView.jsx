@@ -1,9 +1,19 @@
-import React from 'react';
-import { Search, ChevronDown, X, Sparkles, SlidersHorizontal } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Search,
+  ChevronDown,
+  X,
+  SlidersHorizontal,
+  RotateCcw,
+  Upload,
+  ArrowUpDown,
+  Check,
+  Sparkles
+} from 'lucide-react';
 import { useApp } from '../context/AppContext';
 import { PolaroidCard } from '../components/PolaroidCard';
 import { FilterSheet } from '../components/FilterSheet';
-import { DesktopFilterRail } from '../components/DesktopFilterRail';
+import { Pagination } from '../components/Pagination';
 import { FilmStripDecoration } from '../components/PhotographicPreviews';
 
 export const ExploreView = () => {
@@ -12,8 +22,32 @@ export const ExploreView = () => {
     exploreFilters,
     setExploreFilters,
     isFilterSheetOpen,
-    setIsFilterSheetOpen
+    setIsFilterSheetOpen,
+    navigateTo
   } = useApp();
+
+  const ITEMS_PER_PAGE = 6;
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const years = ['All', '2025', '2024', '2023', '2022'];
+  const subjects = ['All', 'CSE', 'IT', 'ECE', 'Mechanical', 'Civil', 'Applied Maths'];
+  const resourceTypes = [
+    { id: 'All', label: 'All Types' },
+    { id: 'Notes', label: 'Notes' },
+    { id: 'PYQs', label: 'PYQs' },
+    { id: 'Cheatsheets', label: 'Cheatsheets' }
+  ];
+  const sortOptions = [
+    { id: 'relevant', label: 'Most Relevant' },
+    { id: 'rating', label: 'Highest Rated ★' },
+    { id: 'downloads', label: 'Most Downloaded 📥' },
+    { id: 'newest', label: 'Recently Added ⚡' }
+  ];
+
+  // Reset to page 1 whenever filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [exploreFilters]);
 
   // Search filtering
   const filteredResources = resources.filter(resource => {
@@ -42,7 +76,7 @@ export const ExploreView = () => {
       if (!matchSub) return false;
     }
 
-    // Flexible Academic Year matching (supports 2022-2025 and 1st-4th Year)
+    // Flexible Academic Year matching
     if (exploreFilters.year !== 'All') {
       const filterY = exploreFilters.year.toLowerCase().trim();
       const resY = (resource.academicYear || '').toLowerCase();
@@ -79,7 +113,13 @@ export const ExploreView = () => {
     filteredResources.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   }
 
-  const hasActiveFilters = exploreFilters.subject !== 'All' || exploreFilters.year !== 'All' || exploreFilters.type !== 'All' || exploreFilters.query !== '';
+  const totalPages = Math.ceil(filteredResources.length / ITEMS_PER_PAGE);
+  const paginatedResources = filteredResources.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const hasActiveFilters = exploreFilters.subject !== 'All' || exploreFilters.year !== 'All' || exploreFilters.type !== 'All' || exploreFilters.query !== '' || exploreFilters.sort !== 'relevant';
 
   const handleResetFilters = () => {
     setExploreFilters({
@@ -91,160 +131,258 @@ export const ExploreView = () => {
     });
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 60, behavior: 'smooth' });
+  };
+
   return (
     <div className="explore-screen-container">
-      {/* Dual Column Layout on Desktop (Filter Rail on Left, Grid on Right) */}
-      <div className="explore-desktop-two-col-layout">
-        {/* Left Column: Persistent Faceted Filter Sidebar on Desktop */}
-        <DesktopFilterRail
-          filters={exploreFilters}
-          onFilterChange={(newFilters) => setExploreFilters(prev => ({ ...prev, ...newFilters }))}
-          onReset={handleResetFilters}
-          totalCount={filteredResources.length}
-        />
+      {/* 1. Global Search Bar */}
+      <div className="explore-search-wrap">
+        <div className="home-search-input-wrap">
+          <Search className="home-search-icon" size={19} color="#9CA3AF" />
+          <input
+            type="text"
+            className="home-search-input"
+            placeholder="Search notes, subjects, topics... (Press ⌘K)"
+            value={exploreFilters.query}
+            onChange={(e) => setExploreFilters(prev => ({ ...prev, query: e.target.value }))}
+            aria-label="Search notes"
+          />
+          {exploreFilters.query && (
+            <button
+              type="button"
+              className="btn-clear-query"
+              onClick={() => setExploreFilters(prev => ({ ...prev, query: '' }))}
+              aria-label="Clear query"
+            >
+              <X size={16} />
+            </button>
+          )}
+          <button
+            type="button"
+            className="home-search-submit-btn tactile-btn"
+            aria-label="Search"
+          >
+            <Search size={18} strokeWidth={2.6} color="#FFFFFF" />
+          </button>
+        </div>
+      </div>
 
-        {/* Right Column: Search + Grid */}
-        <div className="explore-main-content-col">
-          {/* 1. Search Bar with Green Action Button (Screen 4) */}
-          <div className="explore-search-wrap">
-            <div className="home-search-input-wrap">
-              <Search className="home-search-icon" size={19} color="#9CA3AF" />
-              <input
-                type="text"
-                className="home-search-input"
-                placeholder="Search notes, subjects, topics... (Press ⌘K)"
-                value={exploreFilters.query}
-                onChange={(e) => setExploreFilters(prev => ({ ...prev, query: e.target.value }))}
-                aria-label="Search notes"
-              />
-              {exploreFilters.query && (
+      {/* 2. Desktop Horizontal Studio Filter Dock (Visible >= 1024px) */}
+      <div className="explore-desktop-filter-dock" aria-label="Desktop Studio Filters">
+        <div className="dock-top-row">
+          <div className="dock-group-left">
+            <span className="dock-label">Academic Year:</span>
+            <div className="dock-pills-flex">
+              {years.map((y) => (
                 <button
+                  key={y}
                   type="button"
-                  className="btn-clear-query"
-                  onClick={() => setExploreFilters(prev => ({ ...prev, query: '' }))}
-                  aria-label="Clear query"
+                  className={`dock-pill-btn tactile-btn ${exploreFilters.year === y ? 'active' : ''}`}
+                  onClick={() => setExploreFilters(prev => ({ ...prev, year: y }))}
                 >
-                  <X size={16} />
+                  {exploreFilters.year === y && <Check size={11} strokeWidth={3} className="pill-check" />}
+                  <span>{y}</span>
                 </button>
-              )}
+              ))}
+            </div>
+          </div>
+
+          <div className="dock-group-right">
+            {hasActiveFilters && (
               <button
                 type="button"
-                className="home-search-submit-btn tactile-btn"
-                aria-label="Search"
+                className="btn-dock-reset tactile-btn"
+                onClick={handleResetFilters}
+                title="Reset all filters"
               >
-                <Search size={18} strokeWidth={2.6} color="#FFFFFF" />
+                <RotateCcw size={12} />
+                <span>Reset Filters</span>
               </button>
-            </div>
-          </div>
-
-          {/* 2. Mobile Dropdown Filter Pills Row (Hidden on Desktop >= 1024px) */}
-          <div className="explore-dropdown-pills-row mobile-only-filter-row" aria-label="Filter dropdowns">
-            <button
-              type="button"
-              className="dropdown-pill-btn tactile-btn"
-              onClick={() => setIsFilterSheetOpen(true)}
-            >
-              <span>{exploreFilters.year !== 'All' ? `Year: ${exploreFilters.year}` : 'Year'}</span>
-              <ChevronDown size={14} strokeWidth={2.4} />
-            </button>
-
-            <button
-              type="button"
-              className="dropdown-pill-btn tactile-btn"
-              onClick={() => setIsFilterSheetOpen(true)}
-            >
-              <span>{exploreFilters.subject !== 'All' ? exploreFilters.subject : 'Subject'}</span>
-              <ChevronDown size={14} strokeWidth={2.4} />
-            </button>
-
-            <button
-              type="button"
-              className="dropdown-pill-btn tactile-btn"
-              onClick={() => setIsFilterSheetOpen(true)}
-            >
-              <span>{exploreFilters.type !== 'All' ? exploreFilters.type : 'Type'}</span>
-              <ChevronDown size={14} strokeWidth={2.4} />
-            </button>
-
-            <button
-              type="button"
-              className="dropdown-pill-btn tactile-btn"
-              onClick={() => setIsFilterSheetOpen(true)}
-            >
-              <span>Sort</span>
-              <ChevronDown size={14} strokeWidth={2.4} />
-            </button>
-          </div>
-
-          {/* 3. Resource Counter & Active Filter Pills */}
-          <div className="explore-meta-counter-row">
-            <div className="meta-left-group">
-              <span className="resources-count-label">
-                <strong>{filteredResources.length}</strong> resources in frame
-              </span>
-              {hasActiveFilters && (
-                <button className="btn-inline-clear-filters" onClick={handleResetFilters}>
-                  Clear all
-                </button>
-              )}
-            </div>
-
-            <div className="explore-film-accent" aria-hidden="true">
-              <FilmStripDecoration style={{ width: '80px', height: '16px' }} />
-            </div>
-          </div>
-
-          {/* Active Filter Chips Row */}
-          {hasActiveFilters && (
-            <div className="active-filter-chips-row">
-              {exploreFilters.subject !== 'All' && (
-                <span className="active-facet-tag">
-                  Subject: {exploreFilters.subject}
-                  <button onClick={() => setExploreFilters(p => ({ ...p, subject: 'All' }))}>×</button>
-                </span>
-              )}
-              {exploreFilters.year !== 'All' && (
-                <span className="active-facet-tag">
-                  Year: {exploreFilters.year}
-                  <button onClick={() => setExploreFilters(p => ({ ...p, year: 'All' }))}>×</button>
-                </span>
-              )}
-              {exploreFilters.type !== 'All' && (
-                <span className="active-facet-tag">
-                  Type: {exploreFilters.type}
-                  <button onClick={() => setExploreFilters(p => ({ ...p, type: 'All' }))}>×</button>
-                </span>
-              )}
-              {exploreFilters.query && (
-                <span className="active-facet-tag">
-                  Query: "{exploreFilters.query}"
-                  <button onClick={() => setExploreFilters(p => ({ ...p, query: '' }))}>×</button>
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* 4. Responsive Polaroid Grid (2-cols on mobile, 3-4 cols on desktop) */}
-          <div className="polaroid-explore-grid">
-            {filteredResources.length > 0 ? (
-              filteredResources.map((resource) => (
-                <PolaroidCard key={resource.id} resource={resource} />
-              ))
-            ) : (
-              <div className="explore-empty-state">
-                <div className="empty-state-badge">No notes found</div>
-                <h3>No study resources match this filter</h3>
-                <p>Try resetting the subject or year filter to see all notes.</p>
-                <button className="btn-primary tactile-btn" onClick={handleResetFilters}>
-                  Reset All Filters
-                </button>
-              </div>
             )}
+          </div>
+        </div>
+
+        <div className="dock-middle-row">
+          <span className="dock-label">Department:</span>
+          <div className="dock-pills-flex">
+            {subjects.map((sub) => (
+              <button
+                key={sub}
+                type="button"
+                className={`dock-pill-btn tactile-btn ${exploreFilters.subject === sub ? 'active' : ''}`}
+                onClick={() => setExploreFilters(prev => ({ ...prev, subject: sub }))}
+              >
+                <span>{sub}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="dock-action-bar">
+          <div className="dock-type-group">
+            <span className="dock-label">Type:</span>
+            <div className="dock-pills-flex">
+              {resourceTypes.map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  className={`dock-pill-btn tactile-btn ${exploreFilters.type === t.id ? 'active' : ''}`}
+                  onClick={() => setExploreFilters(prev => ({ ...prev, type: t.id }))}
+                >
+                  <span>{t.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="dock-sort-and-cta">
+            <div className="dock-sort-wrap">
+              <ArrowUpDown size={13} color="#6B7280" />
+              <select
+                className="dock-sort-select"
+                value={exploreFilters.sort || 'relevant'}
+                onChange={(e) => setExploreFilters(prev => ({ ...prev, sort: e.target.value }))}
+                aria-label="Sort study resources"
+              >
+                {sortOptions.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <button
+              type="button"
+              className="btn-dock-contribute tactile-btn"
+              onClick={() => navigateTo('upload')}
+              title="Contribute notes to campus archive"
+            >
+              <Upload size={14} strokeWidth={2.4} />
+              <span>Contribute Notes</span>
+            </button>
           </div>
         </div>
       </div>
 
-      {/* 5. Filter Bottom Sheet (for Mobile users) */}
+      {/* 3. Mobile Dropdown Filter Pills Row (Untouched for mobile users < 1024px) */}
+      <div className="explore-dropdown-pills-row mobile-only-filter-row" aria-label="Filter dropdowns">
+        <button
+          type="button"
+          className="dropdown-pill-btn tactile-btn"
+          onClick={() => setIsFilterSheetOpen(true)}
+        >
+          <span>{exploreFilters.year !== 'All' ? `Year: ${exploreFilters.year}` : 'Year'}</span>
+          <ChevronDown size={14} strokeWidth={2.4} />
+        </button>
+
+        <button
+          type="button"
+          className="dropdown-pill-btn tactile-btn"
+          onClick={() => setIsFilterSheetOpen(true)}
+        >
+          <span>{exploreFilters.subject !== 'All' ? exploreFilters.subject : 'Subject'}</span>
+          <ChevronDown size={14} strokeWidth={2.4} />
+        </button>
+
+        <button
+          type="button"
+          className="dropdown-pill-btn tactile-btn"
+          onClick={() => setIsFilterSheetOpen(true)}
+        >
+          <span>{exploreFilters.type !== 'All' ? exploreFilters.type : 'Type'}</span>
+          <ChevronDown size={14} strokeWidth={2.4} />
+        </button>
+
+        <button
+          type="button"
+          className="dropdown-pill-btn tactile-btn"
+          onClick={() => setIsFilterSheetOpen(true)}
+        >
+          <span>Sort</span>
+          <ChevronDown size={14} strokeWidth={2.4} />
+        </button>
+      </div>
+
+      {/* 4. Live Counter & Active Filter Chips */}
+      <div className="explore-meta-counter-row">
+        <div className="meta-left-group">
+          <span className="resources-count-label">
+            Showing <strong>{filteredResources.length}</strong> resources in frame
+          </span>
+          {hasActiveFilters && (
+            <button className="btn-inline-clear-filters" onClick={handleResetFilters}>
+              Clear all
+            </button>
+          )}
+        </div>
+
+        <div className="explore-film-accent" aria-hidden="true">
+          <FilmStripDecoration style={{ width: '80px', height: '16px' }} />
+        </div>
+      </div>
+
+      {/* Active Filter Chips Row */}
+      {hasActiveFilters && (
+        <div className="active-filter-chips-row">
+          {exploreFilters.subject !== 'All' && (
+            <span className="active-facet-tag">
+              Subject: {exploreFilters.subject}
+              <button onClick={() => setExploreFilters(p => ({ ...p, subject: 'All' }))}>×</button>
+            </span>
+          )}
+          {exploreFilters.year !== 'All' && (
+            <span className="active-facet-tag">
+              Year: {exploreFilters.year}
+              <button onClick={() => setExploreFilters(p => ({ ...p, year: 'All' }))}>×</button>
+            </span>
+          )}
+          {exploreFilters.type !== 'All' && (
+            <span className="active-facet-tag">
+              Type: {exploreFilters.type}
+              <button onClick={() => setExploreFilters(p => ({ ...p, type: 'All' }))}>×</button>
+            </span>
+          )}
+          {exploreFilters.query && (
+            <span className="active-facet-tag">
+              Query: "{exploreFilters.query}"
+              <button onClick={() => setExploreFilters(p => ({ ...p, query: '' }))}>×</button>
+            </span>
+          )}
+        </div>
+      )}
+
+      {/* 5. Responsive Full-Width Polaroid Grid (3-4 cols desktop, 2-cols mobile) */}
+      <div className="polaroid-explore-grid">
+        {paginatedResources.length > 0 ? (
+          paginatedResources.map((resource) => (
+            <PolaroidCard key={resource.id} resource={resource} />
+          ))
+        ) : (
+          <div className="explore-empty-state">
+            <div className="empty-state-badge">No notes found</div>
+            <h3>No study resources match this filter</h3>
+            <p>Try resetting the subject or year filter to see all notes.</p>
+            <button className="btn-primary tactile-btn" onClick={handleResetFilters}>
+              Reset All Filters
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* 6. Production-Level Pagination */}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={filteredResources.length}
+        pageSize={ITEMS_PER_PAGE}
+        onPageChange={handlePageChange}
+      />
+
+      {/* 7. Filter Bottom Sheet (for Mobile users) */}
       <FilterSheet
         isOpen={isFilterSheetOpen}
         onClose={() => setIsFilterSheetOpen(false)}
@@ -254,3 +392,5 @@ export const ExploreView = () => {
     </div>
   );
 };
+
+export default ExploreView;
