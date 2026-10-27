@@ -70,19 +70,19 @@ export const StudentAuthModal = () => {
   // 1-Click Quick Demo Prefill for Evaluators & Judges
   const handleQuickDemoPrefill = () => {
     if (authTab === 'signin') {
-      setSignInEmail('khushi.sharma@sasc.campus.edu');
+      setSignInEmail('khushiroongta0801@gmail.com');
       setSignInPassword('CampusPass2026!');
       showToast({
         title: 'Demo Credentials Loaded! ⚡',
-        description: 'Khushi Sharma (Roll: 21CS042 • CSE Final Year) prefilled.',
+        description: 'Khushi Roongta (Roll: 23IT042 • IT 3rd Year • MIT Alandi) prefilled.',
         type: 'success'
       });
     } else {
-      setRegName('Khushi Sharma');
-      setRegEmail('khushi.sharma@sasc.campus.edu');
-      setRegRollNo('21CS042');
-      setRegDept('Computer Science & Engineering');
-      setRegYear('Final Year (Senior)');
+      setRegName('Khushi Roongta');
+      setRegEmail('khushiroongta0801@gmail.com');
+      setRegRollNo('23IT042');
+      setRegDept('Information Technology');
+      setRegYear('3rd Year (Junior)');
       setRegPassword('CampusPass2026!');
       showToast({
         title: 'Demo Registration Filled! ⚡',
@@ -104,12 +104,13 @@ export const StudentAuthModal = () => {
     }
 
     loginUser({
-      name: signInEmail.toLowerCase().includes('khushi') ? 'Khushi Sharma' : 'Student Scholar',
+      name: signInEmail.toLowerCase().includes('khushi') ? 'Khushi Roongta' : 'Student Scholar',
       email: signInEmail.trim(),
-      rollNo: '21CS042',
-      department: 'Computer Science & Engineering',
-      year: 'Final Year',
-      tier: 'Senior Contributor',
+      rollNo: '23IT042',
+      department: 'Information Technology',
+      college: 'MIT Academy of Engineering, Alandi, Pune',
+      year: '3rd Year',
+      tier: 'Lead Contributor',
       streakDays: 12,
       downloads: 1280
     });
@@ -184,7 +185,7 @@ export const StudentAuthModal = () => {
             type="button"
             className="btn-quick-prefill tactile-btn"
             onClick={handleQuickDemoPrefill}
-            title="Auto-fill with Khushi Sharma (Final Year CSE)"
+            title="Auto-fill with Khushi Roongta (3rd Year IT • MIT Alandi)"
           >
             <Sparkles size={14} />
             <span>1-Click Prefill</span>
@@ -227,7 +228,7 @@ export const StudentAuthModal = () => {
                   id="signin-email"
                   type="text"
                   className="form-input auth-input"
-                  placeholder="e.g. khushi.sharma@sasc.campus.edu or 21CS042"
+                  placeholder="e.g. khushiroongta0801@gmail.com or 23IT042"
                   value={signInEmail}
                   onChange={(e) => setSignInEmail(e.target.value)}
                   autoFocus
@@ -325,7 +326,7 @@ export const StudentAuthModal = () => {
                   id="reg-name"
                   type="text"
                   className="form-input auth-input"
-                  placeholder="e.g. Khushi Sharma"
+                  placeholder="e.g. Khushi Roongta"
                   value={regName}
                   onChange={(e) => setRegName(e.target.value)}
                   autoFocus

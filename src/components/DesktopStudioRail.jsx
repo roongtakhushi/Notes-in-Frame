@@ -17,7 +17,7 @@ import { useApp } from '../context/AppContext';
 import { StudentAvatar } from './StudentAvatar';
 
 export const DesktopStudioRail = () => {
-  const { navigateTo, bookmarks, resources, openNoteDetail, setIsProfileDrawerOpen, showToast } = useApp();
+  const { currentUser, navigateTo, bookmarks, resources, openNoteDetail, setIsProfileDrawerOpen, showToast } = useApp();
 
   // Weekly study hours goal state
   const [studyHours, setStudyHours] = useState(() => {
@@ -57,10 +57,10 @@ export const DesktopStudioRail = () => {
           <StudentAvatar size={50} showStatus={true} />
           <div className="studio-profile-info">
             <div className="studio-profile-name-row">
-              <h3 className="studio-student-name">Khushi Sharma</h3>
-              <span className="studio-badge-tier">Senior Contributor</span>
+              <h3 className="studio-student-name">{currentUser?.name || 'Khushi Roongta'}</h3>
+              <span className="studio-badge-tier">{currentUser?.tier || 'Lead Contributor'}</span>
             </div>
-            <p className="studio-student-sub">Computer Science & Eng. • Year 4</p>
+            <p className="studio-student-sub">IT Engineering • 3rd Year • MIT Alandi</p>
           </div>
         </div>
 

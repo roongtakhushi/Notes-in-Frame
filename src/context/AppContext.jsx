@@ -137,12 +137,13 @@ export const AppProvider = ({ children }) => {
       if (saved) return JSON.parse(saved);
     } catch (e) {}
     return {
-      name: 'Khushi Sharma',
-      email: 'khushi.sharma@sasc.campus.edu',
-      rollNo: '21CS042',
-      department: 'Computer Science & Engineering',
-      year: 'Final Year',
-      tier: 'Senior Contributor',
+      name: 'Khushi Roongta',
+      email: 'khushiroongta0801@gmail.com',
+      rollNo: '23IT042',
+      department: 'Information Technology (IT)',
+      college: 'MIT Academy of Engineering, Alandi, Pune',
+      year: '3rd Year',
+      tier: 'Lead Engineer & Senior Contributor',
       streakDays: 12,
       downloads: 1280
     };
@@ -209,9 +210,9 @@ export const AppProvider = ({ children }) => {
       autoDownloadOnWifi: true,
       examAlerts: true,
       peerActivityAlerts: true,
-      university: 'Delhi Technological University',
-      branch: 'Computer Science & Engineering',
-      semester: 'Semester VII',
+      university: 'MIT Academy of Engineering (MIT AOE), Alandi, Pune',
+      branch: 'Information Technology (IT)',
+      semester: 'Semester V (3rd Year)',
       cachedBytes: 50541363 // ~48.2 MB
     };
   });
@@ -290,7 +291,7 @@ export const AppProvider = ({ children }) => {
 
   const downloadAllOfflineArchive = () => {
     try {
-      const text = `Notes in Frame - Offline Study Package\nStudent: Khushi Sharma\nUniversity: ${studySettings.university}\nBranch: ${studySettings.branch} (${studySettings.semester})\nExported: ${new Date().toLocaleString()}\nTotal Bookmarked Resources: ${bookmarks.length}\nStatus: Verified Offline Ready for Exam Preparation.`;
+      const text = `Notes in Frame - Offline Study Package\nStudent: Khushi Roongta\nCollege: MIT Academy of Engineering (MIT AOE), Alandi, Pune\nDepartment: ${studySettings.branch || 'Information Technology (IT)'} (${studySettings.semester || '3rd Year'})\nRoll No: 23IT042\nExported: ${new Date().toLocaleString()}\nTotal Bookmarked Resources: ${bookmarks.length}\nStatus: Verified Offline Ready for Exam Preparation.`;
       const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');

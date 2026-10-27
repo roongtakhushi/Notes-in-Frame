@@ -394,10 +394,10 @@ export const SettingsView = () => {
           <div className="dev-details-col">
             <div className="dev-name-row">
               <h3 className="dev-author-name">Khushi Roongta</h3>
-              <span className="dev-campus-tag">NIT Raipur • Full-Stack Engineer</span>
+              <span className="dev-campus-tag">MIT Alandi, Pune • 3rd Year, IT Engineering</span>
             </div>
             <p className="dev-bio-text">
-              Passionate about high-craft user interfaces, Neobrutalist design systems, and zero-latency web engineering. Built <em>notes in frame.</em> from scratch with a bespoke photographic darkroom theme.
+              Passionate about high-craft user interfaces, tactile darkroom scrapbook design systems, and zero-latency web engineering. Built <em>notes in frame.</em> from scratch with an authentic photographic darkroom & stationery metaphor.
             </p>
           </div>
         </div>
@@ -463,8 +463,8 @@ export const SettingsView = () => {
         <div className="dev-tags-row">
           <span className="dev-tech-pill">React 18</span>
           <span className="dev-tech-pill">Vite 6</span>
-          <span className="dev-tech-pill">Neobrutalist UI</span>
-          <span className="dev-tech-pill">Darkroom Theme</span>
+          <span className="dev-tech-pill">Tactile Stationery</span>
+          <span className="dev-tech-pill">Photographic Darkroom</span>
           <span className="dev-tech-pill">Zero CLS</span>
           <span className="dev-tech-pill">SASC PixelRush 2026</span>
         </div>

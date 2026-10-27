@@ -42,7 +42,7 @@ The palette balances warm stationery cream with energetic darkroom chemistry pas
 | :--- | :--- | :--- | :--- |
 | `--color-cream` | `#FAF8F5` | 🟨 `Cream` | Warm, non-glare stationery paper base; reduces eye strain during late-night study sessions |
 | `--color-paper` | `#FFFFFF` | ⬜ `White` | Pure white Polaroid card interior, offering maximum contrast for text and diagrams |
-| `--color-ink` | `#161514` | ⬛ `Obsidian` | Deep carbon ink for sharp typography, high-contrast borders, and Neobrutalist box shadows |
+| `--color-ink` | `#161514` | ⬛ `Obsidian` | Deep carbon ink for sharp typography, tactile photo borders, and physical scrapbook drop shadows |
 | `--color-green` | `#89BC62` | 🟩 `Grass Green` | Primary brand accent: CTA buttons, verified contributor seals, active pagination, and high-yield badges |
 | `--color-green-light` | `#F0FDF4` | 🟩 `Mint Tint` | Soft background chamber for Computer Science (`CS-01`) slide mounts and success states |
 | `--color-pink` | `#DD88C1` | 🟪 `Daisy Pink` | Emotional delight accent: Washi tape tabs, brand dot (`notes in frame.`), and Electronics (`EC-02`) |
@@ -59,11 +59,12 @@ The palette balances warm stationery cream with energetic darkroom chemistry pas
 Evaluators should never have to manually type credentials during judging.
 - Click **"Sign In"** or open the auth modal.
 - Click **"⚡ 1-Click Prefill"**: Instantly fills verified student credentials:
-  - **Name**: `Khushi Sharma`
-  - **Email**: `khushi.sharma@sasc.campus.edu`
-  - **Roll No**: `21CS042`
-  - **Department**: `Computer Science & Engineering`
-  - **Year**: `Final Year (Senior Contributor)`
+  - **Name**: `Khushi Roongta`
+  - **Email**: `khushiroongta0801@gmail.com`
+  - **Roll No**: `23IT042`
+  - **Department**: `Information Technology (IT) Engineering`
+  - **Year**: `3rd Year (Junior Contributor)`
+  - **Institution**: `MIT Academy of Engineering (MIT AOE), Alandi, Pune`
 - Includes full **Sign In** and **Register Student** tabs with password show/hide eye toggle, college department pickers, and `Escape`/`Enter` keyboard ergonomics.
 
 ### 2. 🚨 Exam Rescue Mode (Dynamic Sprint Countdown)
@@ -163,7 +164,9 @@ flowchart LR
 | **GitHub** | [@roongtakhushi](https://github.com/roongtakhushi) |
 | **Repository** | [github.com/roongtakhushi/Notes-in-Frame](https://github.com/roongtakhushi/Notes-in-Frame) |
 | **Role** | Lead Full-Stack Engineer & UI/UX Product Designer |
-| **Institution** | National Institute of Technology Raipur (NIT Raipur) |
+| **Institution** | MIT Academy of Engineering (MIT AOE), Alandi, Pune |
+| **Department & Year** | 3rd Year · Information Technology (IT) Engineering |
+| **Location** | Pune, Maharashtra, India |
 | **Hackathon** | SASC PixelRush 2026 — *Campus Notes Hub Challenge* |
 
 ---

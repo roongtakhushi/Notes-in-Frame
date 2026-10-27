@@ -22,6 +22,7 @@ import { StudentAvatar } from './StudentAvatar';
 
 export const ProfileDrawer = () => {
   const {
+    currentUser,
     isProfileDrawerOpen,
     setIsProfileDrawerOpen,
     navigateTo,
@@ -77,14 +78,14 @@ export const ProfileDrawer = () => {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
               <h2 className="profile-student-name">
-                Khushi Sharma
+                {currentUser?.name || 'Khushi Roongta'}
               </h2>
               <span className="badge-verified-contributor" title="Verified Campus Contributor">
                 <Award size={11} color="#FFFFFF" />
               </span>
             </div>
             <p className="profile-student-branch">
-              B.Tech CSE • Final Year • Class of 2026
+              B.Tech IT • 3rd Year • MIT Alandi, Pune
             </p>
             <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--color-blue)', display: 'inline-block', marginTop: '2px' }}>
               View Full Student Profile →

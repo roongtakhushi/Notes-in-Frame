@@ -23,6 +23,7 @@ import { StudentAvatar } from '../components/StudentAvatar';
 
 export const ProfileView = () => {
   const {
+    currentUser,
     bookmarks,
     myUploads,
     navigateTo,
@@ -59,19 +60,19 @@ export const ProfileView = () => {
           <div style={{ flex: 1, minWidth: '220px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--text-primary)' }}>
-                Khushi Sharma
+                {currentUser?.name || 'Khushi Roongta'}
               </h1>
               <span className="exposure-tag" style={{ background: 'var(--color-pink-light)', color: 'var(--color-pink-dark)', fontWeight: 700 }}>
-                Top Contributor ★
+                Lead Contributor ★
               </span>
             </div>
 
             <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-              {studySettings.branch || 'B.Tech CSE'} • {studySettings.semester || 'Final Year'}
+              {currentUser?.department || studySettings.branch || 'Information Technology (IT)'} • {currentUser?.year || studySettings.semester || '3rd Year'} • MIT Alandi, Pune
             </p>
 
             <div style={{ display: 'flex', gap: '8px', marginTop: '8px', flexWrap: 'wrap' }}>
-              <span className="exposure-tag">ID: DTU-2026-CS88</span>
+              <span className="exposure-tag">ID: {currentUser?.rollNo || '23IT042'}</span>
               <span className="exposure-tag" style={{ background: 'var(--color-green-light)', color: 'var(--color-green-dark)' }}>
                 Online · Active Study
               </span>
