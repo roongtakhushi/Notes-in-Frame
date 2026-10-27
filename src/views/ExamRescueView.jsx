@@ -3,62 +3,82 @@ import { ArrowLeft, Calendar, ArrowRight, Check, Sparkles, Clock, Target, CheckC
 import { useApp } from '../context/AppContext';
 import { FilmStripDecoration } from '../components/PhotographicPreviews';
 
+const SUBJECT_ROADMAPS = {
+  'Machine Learning': [
+    { id: 'ml-1', text: 'Understand Supervised Loss & Gradient Descent', subtext: '(Unit 1: Linear & Logistic Regression)', completed: true, resourceId: 'nif-01' },
+    { id: 'ml-2', text: 'Practice Backpropagation & Neural Network weight updates', subtext: '(Unit 2 & 3: Loss Derivations)', completed: true, resourceId: 'nif-01' },
+    { id: 'ml-3', text: 'Solve 5-year repeat PYQs (SVM, Decision Trees & Ensembles)', subtext: '(2021–2024 University Exam Questions)', completed: false, resourceId: 'nif-01' },
+    { id: 'ml-4', text: 'Revise Confusion Matrix, ROC-AUC, and Bias-Variance tradeoffs', subtext: '(Unit 4: Model Evaluation)', completed: false, resourceId: null },
+    { id: 'ml-5', text: 'Take a 45-minute timed mock test on high-yield derivations', subtext: '', completed: false, resourceId: null }
+  ],
+  'Data Structures': [
+    { id: 'dsa-1', text: 'Understand Asymptotic Complexity & Master Theorem', subtext: '(Unit 1: Recurrence Relations)', completed: true, resourceId: 'nif-03' },
+    { id: 'dsa-2', text: 'Practice AVL Trees, Red-Black Trees & Heap Rotations', subtext: '(Unit 3: Self-Balancing Trees)', completed: true, resourceId: 'nif-03' },
+    { id: 'dsa-3', text: 'Solve Graph Traversals (BFS, DFS, Dijkstra) PYQs', subtext: '(Shortest Path & MST Repeat Problems)', completed: false, resourceId: 'nif-03' },
+    { id: 'dsa-4', text: 'Revise Dynamic Programming Knapsack & Memoization proofs', subtext: '(Unit 5: Optimal Substructure)', completed: false, resourceId: null },
+    { id: 'dsa-5', text: 'Take a 45-minute timed mock test on Trees & Graph problems', subtext: '', completed: false, resourceId: null }
+  ],
+  'DBMS': [
+    { id: 'dbms-1', text: 'Review ER Modeling & Relational Algebra Axioms', subtext: '(Unit 1: Schema Design & Keys)', completed: true, resourceId: 'nif-02' },
+    { id: 'dbms-2', text: 'Practice B+ Tree Indexing & 3NF/BCNF Normalization proofs', subtext: '(Unit 3: Normalization & Dependencies)', completed: true, resourceId: 'nif-02' },
+    { id: 'dbms-3', text: 'Solve Concurrency Control, 2PL & ACID property PYQs', subtext: '(2021–2024 Solved University Papers)', completed: false, resourceId: 'nif-02' },
+    { id: 'dbms-4', text: 'Write SQL Triggers, Views & Complex Nested Group By Queries', subtext: '(Unit 2: SQL Operations)', completed: false, resourceId: null },
+    { id: 'dbms-5', text: 'Take a 45-minute timed mock test on Transactions & Indexing', subtext: '', completed: false, resourceId: null }
+  ],
+  'Operating Systems': [
+    { id: 'os-1', text: 'Review Process Synchronization & Deadlock Coffman Conditions', subtext: '(Unit 2: Semaphores & Mutex Locks)', completed: true, resourceId: 'nif-04' },
+    { id: 'os-2', text: 'Practice Virtual Memory, Paging & Page Replacement (LRU/FIFO)', subtext: '(Unit 4: Address Translation & TLB)', completed: true, resourceId: 'nif-04' },
+    { id: 'os-3', text: 'Solve CPU Scheduling (Round Robin & Priority) repeat PYQs', subtext: '(2021–2024 Solved Midterm Problems)', completed: false, resourceId: 'nif-04' },
+    { id: 'os-4', text: 'Revise File System inode structures and disk scheduling algorithms', subtext: '(Unit 5: Storage Architecture)', completed: false, resourceId: null },
+    { id: 'os-5', text: 'Take a 45-minute timed mock test on Paging & Deadlocks', subtext: '', completed: false, resourceId: null }
+  ],
+  'Computer Networks': [
+    { id: 'cn-1', text: 'Review OSI 7-Layer vs TCP/IP Protocol Stack Architecture', subtext: '(Unit 1: Protocol Layers & Framing)', completed: true, resourceId: 'nif-07' },
+    { id: 'cn-2', text: 'Practice IPv4 CIDR Subnetting, Masking & Broadcast calculations', subtext: '(Unit 2: Slash Notation Shortcuts)', completed: true, resourceId: 'nif-07' },
+    { id: 'cn-3', text: 'Solve TCP 3-Way Handshake & Sliding Window Flow Control PYQs', subtext: '(2021–2024 Solved Questions)', completed: false, resourceId: 'nif-07' },
+    { id: 'cn-4', text: 'Revise Routing Algorithms (Dijkstra Shortest Path & Bellman-Ford)', subtext: '(Unit 3: Network Layer Routing)', completed: false, resourceId: null },
+    { id: 'cn-5', text: 'Take a 45-minute timed mock test on Subnetting & TCP Handshakes', subtext: '', completed: false, resourceId: null }
+  ],
+  'Engineering Maths': [
+    { id: 'math-1', text: 'Review Laplace & Inverse Laplace Transform Definitions', subtext: '(Unit 1: Formulas & Standard Transforms)', completed: true, resourceId: 'nif-06' },
+    { id: 'math-2', text: 'Practice Fourier Series & Half-Range Sine/Cosine Expansions', subtext: '(Unit 2: Derivations & Orthogonality)', completed: true, resourceId: 'nif-06' },
+    { id: 'math-3', text: 'Solve 2nd-Order Partial Differential Wave Equations PYQs', subtext: '(2021–2024 Solved University Papers)', completed: false, resourceId: 'nif-06' },
+    { id: 'math-4', text: 'Revise Probability Distributions, Poisson & Bayes Theorem proofs', subtext: '(Unit 5: Probability & Statistics)', completed: false, resourceId: null },
+    { id: 'math-5', text: 'Take a 45-minute timed mock test on Laplace & Wave Equations', subtext: '', completed: false, resourceId: null }
+  ]
+};
+
 export const ExamRescueView = () => {
   const {
     examState,
     generateExamPlan,
     toggleChecklistTask,
     navigateBack,
-    navigateTo,
+    openNoteDetail,
     showToast
   } = useApp();
 
   const [subject, setSubject] = useState(examState.selectedSubject || 'Machine Learning');
-  const [examDate, setExamDate] = useState(examState.examDate || '2025-11-15');
+  const [examDate, setExamDate] = useState(examState.examDate || '2026-11-15');
 
-  // Hardcoded or dynamically derived checklist items matching Screen 7
-  const defaultTasks = [
-    {
-      id: 'task-1',
-      text: 'Understand key concepts',
-      subtext: '(Use Unit 1 Notes)',
-      completed: true,
-      resourceId: 'nif-01'
-    },
-    {
-      id: 'task-2',
-      text: 'Practise PYQs (2021 - 2024)',
-      subtext: '(DBMS & ML Repeat Questions)',
-      completed: true,
-      resourceId: 'nif-02'
-    },
-    {
-      id: 'task-3',
-      text: 'Solve sample questions',
-      subtext: '',
-      completed: false,
-      resourceId: null
-    },
-    {
-      id: 'task-4',
-      text: 'Revise important formulas',
-      subtext: '',
-      completed: false,
-      resourceId: null
-    },
-    {
-      id: 'task-5',
-      text: 'Take a mock test',
-      subtext: '',
-      completed: false,
-      resourceId: null
-    }
-  ];
-
-  const [tasks, setTasks] = useState(defaultTasks);
+  const [tasks, setTasks] = useState(() => {
+    return SUBJECT_ROADMAPS[examState.selectedSubject] || SUBJECT_ROADMAPS['Machine Learning'];
+  });
 
   const completedCount = tasks.filter(t => t.completed).length;
   const progressPercent = Math.round((completedCount / tasks.length) * 100);
+
+  // Dynamic Subject Switcher: Instantly regenerates tailored roadmap
+  const handleSubjectChange = (newSubject) => {
+    setSubject(newSubject);
+    const newRoadmap = SUBJECT_ROADMAPS[newSubject] || SUBJECT_ROADMAPS['Machine Learning'];
+    setTasks(newRoadmap);
+    showToast({
+      title: `${newSubject} Sprint Loaded! ⚡`,
+      description: `Synchronized 5 targeted revision milestones and repeat PYQ derivations.`,
+      type: 'info'
+    });
+  };
 
   const handleToggleTask = (id) => {
     const currentTask = tasks.find(t => t.id === id);
@@ -66,19 +86,15 @@ export const ExamRescueView = () => {
 
     const nextCompleted = !currentTask.completed;
 
-    // 1. Update tasks state
     setTasks(prev => prev.map(t => t.id === id ? { ...t, completed: nextCompleted } : t));
 
-    // 2. Completed count calculation
     const nextCompletedCount = tasks.filter(t => t.id === id ? nextCompleted : t.completed).length;
 
-    // 3. Trigger toast feedback in event handler
     if (nextCompleted) {
       showToast({
         title: 'Revision Task Completed! 🎉',
         description: `"${currentTask.text}" checked off. (${nextCompletedCount}/${tasks.length} tasks ready)`,
         type: 'success',
-        duration: 8000,
         action: {
           label: 'Undo',
           onClick: () => {
@@ -96,7 +112,6 @@ export const ExamRescueView = () => {
         title: 'Task Unchecked',
         description: `"${currentTask.text}" moved back to active checklist.`,
         type: 'info',
-        duration: 8000,
         action: {
           label: 'Undo',
           onClick: () => {
@@ -115,9 +130,11 @@ export const ExamRescueView = () => {
   const handleGeneratePlan = (e) => {
     e.preventDefault();
     generateExamPlan(subject, examDate);
+    const newRoadmap = SUBJECT_ROADMAPS[subject] || SUBJECT_ROADMAPS['Machine Learning'];
+    setTasks(newRoadmap);
     showToast({
       title: `Exam Sprint Plan Ready for ${subject}! ⚡`,
-      description: `Targeted 48-hour checklist synchronized with syllabus and repeat PYQs.`,
+      description: `Targeted sprint checklist synchronized with syllabus and repeat PYQs.`,
       type: 'exam'
     });
   };
@@ -182,13 +199,13 @@ export const ExamRescueView = () => {
               <select
                 className="rescue-select-input"
                 value={subject}
-                onChange={(e) => setSubject(e.target.value)}
+                onChange={(e) => handleSubjectChange(e.target.value)}
               >
                 <option value="Machine Learning">Machine Learning (CS401)</option>
-                <option value="DBMS">DBMS - Database Management</option>
                 <option value="Data Structures">Data Structures & Algorithms</option>
-                <option value="Operating Systems">Operating Systems Memo</option>
-                <option value="Computer Networks">Computer Networks</option>
+                <option value="DBMS">DBMS - Database Management Systems</option>
+                <option value="Operating Systems">Operating Systems (CS503)</option>
+                <option value="Computer Networks">Computer Networks (CS504)</option>
                 <option value="Engineering Maths">Engineering Mathematics III</option>
               </select>
             </div>
@@ -201,7 +218,7 @@ export const ExamRescueView = () => {
                   className="rescue-text-input"
                   value={examDate}
                   onChange={(e) => setExamDate(e.target.value)}
-                  placeholder="15 Nov 2025"
+                  placeholder="15 Nov 2026"
                 />
                 <span className="calendar-suffix-icon" aria-hidden="true">
                   <Calendar size={18} color="#6B7280" />
@@ -233,7 +250,7 @@ export const ExamRescueView = () => {
                   <span className="weeks-countdown-badge">4 weeks to go!</span>
                 </div>
                 <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                  Deterministic checklist matching high-yield exam derivations & 5-year repeat PYQs
+                  Deterministic checklist matching high-yield {subject} derivations & repeat PYQs
                 </p>
               </div>
             </div>
@@ -279,10 +296,10 @@ export const ExamRescueView = () => {
                         onClick={(e) => {
                           e.stopPropagation();
                           if (task.resourceId) {
-                            navigateTo('detail', task.resourceId);
+                            openNoteDetail(task.resourceId);
                           }
                         }}
-                        title="Click to open attached study note"
+                        title="Click to view attached study notes"
                       >
                         {task.subtext} ↗
                       </span>

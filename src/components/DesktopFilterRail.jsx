@@ -3,37 +3,30 @@ import {
   SlidersHorizontal,
   RotateCcw,
   Check,
-  Sparkles,
-  Hash,
-  Award,
-  ShieldCheck,
   Upload,
-  ArrowUpRight
+  ArrowUpDown
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
 export const DesktopFilterRail = ({ filters, onFilterChange, onReset, totalCount }) => {
-  const { setIsUploadOpen } = useApp();
+  const { navigateTo } = useApp();
 
   const years = ['All', '2025', '2024', '2023', '2022'];
-  const subjects = ['All', 'CSE', 'ECE', 'Mechanical', 'Civil', 'IT'];
-  const resourceTypes = ['All', 'Lecture Notes', 'PYQs', 'Revision Guides'];
+  const subjects = ['All', 'CSE', 'IT', 'ECE', 'Mechanical', 'Civil', 'Applied Maths'];
+  const resourceTypes = [
+    { id: 'All', label: 'All' },
+    { id: 'Notes', label: 'Notes' },
+    { id: 'PYQs', label: 'PYQs' },
+    { id: 'Cheatsheets', label: 'Cheatsheets' }
+  ];
+  
   const sortOptions = [
     { id: 'relevant', label: 'Most Relevant' },
-    { id: 'rating', label: 'Highest Rated (★ 4.8+)' },
-    { id: 'downloads', label: 'Most Downloaded' },
-    { id: 'newest', label: 'Recently Added' }
+    { id: 'rating', label: 'Highest Rated ★' },
+    { id: 'downloads', label: 'Most Downloaded 📥' },
+    { id: 'newest', label: 'Recently Added ⚡' }
   ];
 
-  // High-yield trending topic tags across campus syllabus
-  const trendingTags = [
-    { tag: 'Loss Functions', query: 'loss functions' },
-    { tag: 'SQL Joins & Relational', query: 'DBMS' },
-    { tag: 'Binary Trees & Graphs', query: 'Data Structures' },
-    { tag: 'Fourier & Laplace', query: 'Signals' },
-    { tag: 'Paging & Memory', query: 'Operating Systems' },
-    { tag: 'Thermodynamics Heat', query: 'Thermodynamics' }
-  ];
 
   const hasActiveFilters =
     filters.subject !== 'All' ||
@@ -43,12 +36,12 @@ export const DesktopFilterRail = ({ filters, onFilterChange, onReset, totalCount
     Boolean(filters.query);
 
   return (
-    <aside className="desktop-filter-rail" aria-label="Desktop Faceted Search Filters">
-      {/* 1. Header with Active Filter Count & Reset */}
+    <aside className="desktop-filter-rail" aria-label="Desktop Search Filters">
+      {/* 1. Filter Header & Reset */}
       <div className="filter-rail-header">
         <div className="filter-rail-title-wrap">
-          <SlidersHorizontal size={18} color="#407ADD" strokeWidth={2.4} />
-          <h3 className="filter-rail-heading">Faceted Filters</h3>
+          <SlidersHorizontal size={16} color="#407ADD" strokeWidth={2.4} />
+          <h3 className="filter-rail-heading">Filter Notes</h3>
         </div>
         {hasActiveFilters && (
           <button
@@ -56,21 +49,13 @@ export const DesktopFilterRail = ({ filters, onFilterChange, onReset, totalCount
             onClick={onReset}
             title="Reset all search filters"
           >
-            <RotateCcw size={13} />
+            <RotateCcw size={12} />
             <span>Reset</span>
           </button>
         )}
       </div>
 
-      {/* Live Result Counter Pill */}
-      <div className="filter-live-metrics-banner">
-        <span className="live-metrics-dot" />
-        <span className="live-metrics-text">
-          Showing <strong>{totalCount}</strong> verified notes
-        </span>
-      </div>
-
-      {/* 2. Academic Year Section */}
+      {/* 2. Academic Year Selector */}
       <div className="filter-rail-section">
         <h4 className="filter-section-title">Academic Year</h4>
         <div className="filter-chip-grid">
@@ -79,119 +64,80 @@ export const DesktopFilterRail = ({ filters, onFilterChange, onReset, totalCount
               key={y}
               className={`filter-facet-chip ${filters.year === y ? 'active' : ''}`}
               onClick={() => onFilterChange({ year: y })}
+              type="button"
             >
-              {filters.year === y && <Check size={12} strokeWidth={3} className="chip-check" />}
+              {filters.year === y && <Check size={11} strokeWidth={3} className="chip-check" />}
               <span>{y}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* 3. Department & Subject Section */}
+      {/* 3. Department / Subject Selector */}
       <div className="filter-rail-section">
-        <h4 className="filter-section-title">Department / Subject</h4>
-        <div className="filter-vertical-list">
+        <h4 className="filter-section-title">Department</h4>
+        <div className="filter-tags-grid">
           {subjects.map((sub) => (
             <button
               key={sub}
-              className={`filter-facet-row ${filters.subject === sub ? 'active' : ''}`}
+              className={`filter-facet-pill ${filters.subject === sub ? 'active' : ''}`}
               onClick={() => onFilterChange({ subject: sub })}
+              type="button"
             >
-              <span className={`facet-radio-dot ${filters.subject === sub ? 'active' : ''}`} />
-              <span className="facet-row-label">{sub}</span>
+              <span>{sub}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* 4. Resource Type Section */}
+      {/* 4. Resource Type Selector */}
       <div className="filter-rail-section">
         <h4 className="filter-section-title">Resource Type</h4>
-        <div className="filter-vertical-list">
-          {resourceTypes.map((type) => (
+        <div className="filter-chip-grid">
+          {resourceTypes.map((t) => (
             <button
-              key={type}
-              className={`filter-facet-row ${filters.type === type ? 'active' : ''}`}
-              onClick={() => onFilterChange({ type })}
+              key={t.id}
+              className={`filter-facet-chip ${filters.type === t.id ? 'active' : ''}`}
+              onClick={() => onFilterChange({ type: t.id })}
+              type="button"
             >
-              <span className={`facet-radio-dot ${filters.type === type ? 'active' : ''}`} />
-              <span className="facet-row-label">{type}</span>
+              <span>{t.label}</span>
             </button>
           ))}
         </div>
       </div>
 
-      {/* 5. Sort Options */}
-      <div className="filter-rail-section">
-        <h4 className="filter-section-title">Sort By</h4>
-        <div className="filter-vertical-list">
-          {sortOptions.map((opt) => (
-            <button
-              key={opt.id}
-              className={`filter-facet-row ${filters.sort === opt.id ? 'active' : ''}`}
-              onClick={() => onFilterChange({ sort: opt.id })}
-            >
-              <span className={`facet-radio-dot ${filters.sort === opt.id ? 'active' : ''}`} />
-              <span className="facet-row-label">{opt.label}</span>
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* 6. Trending Syllabus Hashtags Cloud */}
+      {/* 5. Sort By Selector */}
       <div className="filter-rail-section">
         <div className="filter-section-title-row">
-          <h4 className="filter-section-title">Trending Topics</h4>
-          <Sparkles size={13} color="#DD88C1" />
+          <h4 className="filter-section-title">Sort By</h4>
+          <ArrowUpDown size={13} color="#6B7280" />
         </div>
-        <div className="trending-tags-flex">
-          {trendingTags.map((item) => (
-            <button
-              key={item.tag}
-              type="button"
-              className="trending-tag-pill tactile-btn"
-              onClick={() => onFilterChange({ query: item.query })}
-              title={`Filter by ${item.tag}`}
-            >
-              <Hash size={12} className="tag-hash-icon" />
-              <span>{item.tag}</span>
-            </button>
+        <select
+          className="filter-sort-select"
+          value={filters.sort || 'relevant'}
+          onChange={(e) => onFilterChange({ sort: e.target.value })}
+          aria-label="Sort study resources"
+        >
+          {sortOptions.map((opt) => (
+            <option key={opt.id} value={opt.id}>
+              {opt.label}
+            </option>
           ))}
-        </div>
+        </select>
       </div>
 
-      {/* 7. Contributor Spotlight Mini-Card */}
-      <div className="rail-contributor-spotlight">
-        <div className="spotlight-badge-row">
-          <Award size={14} color="#89BC62" />
-          <span className="spotlight-label">Curator Spotlight</span>
-        </div>
-        <div className="spotlight-user-row">
-          <div className="spotlight-avatar">AM</div>
-          <div>
-            <h5 className="spotlight-name">Aarav Mehta</h5>
-            <span className="spotlight-sub">Final Year CSE • 4.9★</span>
-          </div>
-        </div>
-        <p className="spotlight-text">
-          Uploaded 18 verified handwritten notes covering CSE Semester 4.
-        </p>
+      {/* 6. Action CTA: Contribute Notes (Routes directly to Upload screen) */}
+      <div className="filter-rail-contribute-card">
         <button
-          className="btn-spotlight-upload tactile-btn"
-          onClick={() => setIsUploadOpen(true)}
+          type="button"
+          className="btn-rail-contribute tactile-btn"
+          onClick={() => navigateTo('upload')}
+          title="Contribute your study notes to the campus frame"
         >
-          <Upload size={13} />
+          <Upload size={15} strokeWidth={2.4} />
           <span>Contribute Notes</span>
         </button>
-      </div>
-
-      {/* 8. Study Quality Guarantee Shield */}
-      <div className="rail-quality-shield">
-        <ShieldCheck size={18} color="#407ADD" />
-        <div className="shield-text">
-          <span className="shield-title">100% Peer-Verified</span>
-          <span className="shield-desc">Legible scans, clean margins, and SASC syllabus checked.</span>
-        </div>
       </div>
     </aside>
   );

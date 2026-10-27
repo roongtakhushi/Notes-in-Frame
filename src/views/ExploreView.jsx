@@ -26,14 +26,46 @@ export const ExploreView = () => {
       const matchTags = resource.tags?.some(t => t.toLowerCase().includes(q));
       if (!matchTitle && !matchSubject && !matchTopic && !matchCode && !matchTags) return false;
     }
-    if (exploreFilters.subject !== 'All' && resource.subject !== exploreFilters.subject) {
-      return false;
+
+    // Flexible Department / Subject matching
+    if (exploreFilters.subject !== 'All') {
+      const s = exploreFilters.subject.toLowerCase();
+      const resSubject = (resource.subject || '').toLowerCase();
+      const resCode = (resource.subjectCode || '').toLowerCase();
+      const matchSub = resSubject.includes(s) || resCode.includes(s) ||
+        (s === 'cse' && (resSubject.includes('computer') || resSubject.includes('machine learning') || resSubject.includes('data structures') || resSubject.includes('operating systems'))) ||
+        (s === 'it' && (resSubject.includes('information') || resSubject.includes('dbms') || resSubject.includes('cloud') || resSubject.includes('network'))) ||
+        (s === 'ece' && (resSubject.includes('electronics') || resSubject.includes('signal') || resSubject.includes('vlsi'))) ||
+        (s === 'mechanical' && (resSubject.includes('thermodynamics') || resSubject.includes('mech'))) ||
+        (s === 'civil' && (resSubject.includes('civil') || resSubject.includes('structure') || resSubject.includes('rcc'))) ||
+        (s === 'applied maths' && (resSubject.includes('math') || resSubject.includes('calculus') || resSubject.includes('physics')));
+      if (!matchSub) return false;
     }
-    if (exploreFilters.year !== 'All' && resource.academicYear !== exploreFilters.year) {
-      return false;
+
+    // Flexible Academic Year matching (supports 2022-2025 and 1st-4th Year)
+    if (exploreFilters.year !== 'All') {
+      const filterY = exploreFilters.year.toLowerCase().trim();
+      const resY = (resource.academicYear || '').toLowerCase();
+      const resLabel = (resource.yearLabel || '').toLowerCase();
+      
+      const isYearMatch = resY.includes(filterY) || resLabel.includes(filterY) ||
+        (filterY === '2025' && (resLabel.includes('4th') || resLabel.includes('final') || resY === '2025')) ||
+        (filterY === '2024' && (resLabel.includes('3rd') || resY === '2024')) ||
+        (filterY === '2023' && (resLabel.includes('2nd') || resY === '2023')) ||
+        (filterY === '2022' && (resLabel.includes('1st') || resY === '2022'));
+        
+      if (!isYearMatch) return false;
     }
-    if (exploreFilters.type !== 'All' && resource.resourceType !== exploreFilters.type) {
-      return false;
+
+    // Flexible Resource Type matching
+    if (exploreFilters.type !== 'All') {
+      const t = exploreFilters.type.toLowerCase();
+      const resType = (resource.resourceType || '').toLowerCase();
+      const matchType = resType.includes(t) ||
+        (t === 'notes' && (resType.includes('note') || resType.includes('handwritten'))) ||
+        (t === 'pyqs' && (resType.includes('pyq') || resType.includes('question'))) ||
+        (t === 'cheatsheets' && (resType.includes('revision') || resType.includes('cheat') || resType.includes('formula')));
+      if (!matchType) return false;
     }
     return true;
   });
@@ -43,6 +75,8 @@ export const ExploreView = () => {
     filteredResources.sort((a, b) => (b.rating || 0) - (a.rating || 0));
   } else if (exploreFilters.sort === 'downloads') {
     filteredResources.sort((a, b) => (b.downloadCount || 0) - (a.downloadCount || 0));
+  } else if (exploreFilters.sort === 'newest') {
+    filteredResources.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
   }
 
   const hasActiveFilters = exploreFilters.subject !== 'All' || exploreFilters.year !== 'All' || exploreFilters.type !== 'All' || exploreFilters.query !== '';

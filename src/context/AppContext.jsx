@@ -13,7 +13,10 @@ export const AppProvider = ({ children }) => {
     try {
       const saved = localStorage.getItem('nif_resources');
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length >= INITIAL_RESOURCES.length) {
+          return parsed;
+        }
       }
     } catch (e) {
       console.error('Error loading resources from localStorage', e);

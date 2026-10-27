@@ -233,14 +233,18 @@ export const ProfileDrawer = () => {
             </button>
           </div>
 
-          {/* Bottom Decorative Pink Note & Film Strip */}
-          <div className="profile-modal-footer">
-            <div className="profile-footer-film" aria-hidden="true">
-              <FilmStripDecoration vertical style={{ height: '54px', width: '18px' }} />
-            </div>
-
-            <div className="profile-pink-sticky-note" style={{ fontSize: '0.875rem', padding: '6px 10px' }}>
-              good notes<br />brighter days ♡
+          {/* Bottom Stationery Sign-off */}
+          <div className="profile-modal-footer-craft" aria-label="Campus archive keepsake">
+            <div className="profile-craft-washi-tape" aria-hidden="true" />
+            <div className="profile-craft-inner">
+              <div className="profile-craft-stamp">
+                <span className="profile-craft-sprockets">▪ ▪ ▪</span>
+                <span>NOTES IN FRAME · CAMPUS ARCHIVE</span>
+                <span className="profile-craft-sprockets">▪ ▪ ▪</span>
+              </div>
+              <div className="profile-craft-signoff">
+                good notes · brighter days <span className="profile-craft-heart">♡</span>
+              </div>
             </div>
           </div>
         </div>
