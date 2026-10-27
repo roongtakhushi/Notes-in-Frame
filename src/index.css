@@ -3300,9 +3300,21 @@ img, svg {
 }
 
 .exam-rescue-film-corner {
-  position: absolute;
-  right: 0;
-  top: -4px;
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .exam-rescue-title-area {
+    padding-right: 36px;
+  }
+
+  .exam-rescue-film-corner {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: -4px;
+    pointer-events: none;
+  }
 }
 
 /* Stepper */
