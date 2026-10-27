@@ -16,8 +16,29 @@ import {
   Wifi,
   Sun,
   Layers,
-  BookOpen
+  BookOpen,
+  Code2,
+  Mail,
+  ExternalLink,
+  Copy
 } from 'lucide-react';
+
+const GithubIcon = ({ size = 16, ...props }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-2" />
+  </svg>
+);
 import { useApp } from '../context/AppContext';
 
 export const SettingsView = () => {
@@ -343,7 +364,113 @@ export const SettingsView = () => {
         </div>
       </div>
 
-      {/* 5. Account & Session Management */}
+      {/* 5. Developer & Maintainer Information (Evaluator Showcase) */}
+      <div className="settings-card settings-dev-card" style={{ marginBottom: '1.5rem' }}>
+        {/* Top Photographic Washi Tape Accent */}
+        <span className="dev-card-washi-tape" aria-hidden="true" />
+
+        <div className="settings-card-header">
+          <div className="settings-card-icon" style={{ background: '#EFF6FF', color: '#2563EB' }}>
+            <Code2 size={20} strokeWidth={2.4} />
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+              <h2 className="settings-card-title">Developer & Maintainer</h2>
+              <span className="dev-role-badge">Lead Engineer</span>
+            </div>
+            <p className="settings-card-subtitle">
+              Designed & engineered by Khushi Roongta for the SASC PixelRush Challenge
+            </p>
+          </div>
+        </div>
+
+        {/* Developer Profile Bio & Contacts */}
+        <div className="dev-profile-container">
+          <div className="dev-avatar-box">
+            <span className="dev-avatar-emoji" role="img" aria-label="developer">👩‍💻</span>
+            <div className="dev-online-dot" title="Active Contributor" />
+          </div>
+
+          <div className="dev-details-col">
+            <div className="dev-name-row">
+              <h3 className="dev-author-name">Khushi Roongta</h3>
+              <span className="dev-campus-tag">NIT Raipur • Full-Stack Engineer</span>
+            </div>
+            <p className="dev-bio-text">
+              Passionate about high-craft user interfaces, Neobrutalist design systems, and zero-latency web engineering. Built <em>notes in frame.</em> from scratch with a bespoke photographic darkroom theme.
+            </p>
+          </div>
+        </div>
+
+        {/* Contact Links & Repository Actions */}
+        <div className="dev-actions-grid">
+          {/* Email button with mailto */}
+          <a
+            href="mailto:khushiroongta0801@gmail.com"
+            className="dev-action-btn btn-email tactile-btn"
+            title="Send Email to Khushi Roongta"
+          >
+            <Mail size={16} />
+            <span>khushiroongta0801@gmail.com</span>
+          </a>
+
+          {/* Copy Email quick button */}
+          <button
+            type="button"
+            className="dev-action-btn btn-copy tactile-btn"
+            onClick={() => {
+              navigator.clipboard?.writeText?.('khushiroongta0801@gmail.com');
+              showToast({
+                title: 'Email Copied 📋',
+                description: 'khushiroongta0801@gmail.com copied to your clipboard.',
+                type: 'success'
+              });
+            }}
+            title="Copy email to clipboard"
+          >
+            <Copy size={15} />
+            <span>Copy</span>
+          </button>
+
+          {/* GitHub Profile */}
+          <a
+            href="https://github.com/roongtakhushi"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dev-action-btn btn-github tactile-btn"
+            title="Open Khushi Roongta's GitHub Profile"
+          >
+            <GithubIcon size={16} />
+            <span>@roongtakhushi</span>
+            <ExternalLink size={13} style={{ opacity: 0.7 }} />
+          </a>
+
+          {/* Repository Link */}
+          <a
+            href="https://github.com/roongtakhushi/Notes-in-Frame"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="dev-action-btn btn-repo tactile-btn"
+            title="View Source Code Repository"
+          >
+            <Sparkles size={15} color="#89BC62" />
+            <span>Notes-in-Frame Repo</span>
+            <ExternalLink size={13} style={{ opacity: 0.7 }} />
+          </a>
+        </div>
+
+        {/* Tech Stack & Design Badges */}
+        <div className="dev-tags-row">
+          <span className="dev-tech-pill">React 18</span>
+          <span className="dev-tech-pill">Vite 6</span>
+          <span className="dev-tech-pill">Neobrutalist UI</span>
+          <span className="dev-tech-pill">Darkroom Theme</span>
+          <span className="dev-tech-pill">Zero CLS</span>
+          <span className="dev-tech-pill">SASC PixelRush 2026</span>
+        </div>
+      </div>
+
+      {/* 6. Account & Session Management */}
       <div className="settings-card" style={{ marginBottom: '1.5rem', borderColor: '#FEE2E2' }}>
         <div className="settings-card-header">
           <div className="settings-card-icon" style={{ background: '#FEF2F2', color: '#DC2626' }}>
