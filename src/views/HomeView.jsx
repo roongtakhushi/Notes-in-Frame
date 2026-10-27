@@ -284,6 +284,63 @@ export const HomeView = () => {
               })}
             </div>
           </section>
+
+          {/* 6. Campus PYQ & Exam Revision Spotlight */}
+          <section className="home-section-pyq-spotlight" aria-label="Exam Revision Spotlight">
+            <div className="home-section-header">
+              <div className="section-title-wrap">
+                <span className="section-film-badge" aria-hidden="true">🎞️ HIGH-YIELD SPRINTS</span>
+                <h2 className="home-section-title">Exam Revision Fast-Track</h2>
+              </div>
+              <button
+                className="section-see-all-link tactile-btn"
+                onClick={() => navigateTo('exam-rescue')}
+              >
+                <span>Launch Exam Mode</span>
+                <ArrowRight size={14} />
+              </button>
+            </div>
+
+            <div className="home-pyq-spotlight-grid">
+              <div
+                className="pyq-spotlight-card tactile-btn"
+                onClick={() => navigateTo('exam-rescue')}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="spotlight-tape tape-blue" aria-hidden="true" />
+                <div className="spotlight-badge-row">
+                  <span className="spotlight-tag">SEMESTER 4 PYQS</span>
+                  <span className="spotlight-solved-count">🔥 5 Years Solved</span>
+                </div>
+                <h4 className="spotlight-title">Machine Learning & Neural Networks</h4>
+                <p className="spotlight-desc">Loss functions, gradient descent derivations & repeat university question blueprints.</p>
+                <div className="spotlight-foot">
+                  <span className="spotlight-status">Ready in Exam Rescue</span>
+                  <ArrowRight size={13} color="#407ADD" />
+                </div>
+              </div>
+
+              <div
+                className="pyq-spotlight-card tactile-btn"
+                onClick={() => navigateTo('exam-rescue')}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="spotlight-tape tape-pink" aria-hidden="true" />
+                <div className="spotlight-badge-row">
+                  <span className="spotlight-tag">HIGH-YIELD CHEATSHEET</span>
+                  <span className="spotlight-solved-count">⚡ 45 Min Revision</span>
+                </div>
+                <h4 className="spotlight-title">Operating Systems & Paging</h4>
+                <p className="spotlight-desc">Virtual memory, page replacement algorithms, semaphores and deadlock prevention proofs.</p>
+                <div className="spotlight-foot">
+                  <span className="spotlight-status">Ready in Exam Rescue</span>
+                  <ArrowRight size={13} color="#407ADD" />
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
 
         {/* Right Column: Desktop Studio Sidebar Rail */}

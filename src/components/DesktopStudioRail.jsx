@@ -97,12 +97,14 @@ export const DesktopStudioRail = () => {
       <div className="studio-card studio-exam-widget">
         <div className="studio-card-top-tape tape-blue" />
         <div className="studio-widget-title-row">
-          <div className="widget-icon-box blue-box">
-            <Calendar size={18} color="#407ADD" />
-          </div>
-          <div>
-            <h4 className="studio-widget-title">Exam Rescue Mode</h4>
-            <span className="studio-widget-sub">Mid-Semester Sprint</span>
+          <div className="studio-title-left-group">
+            <div className="widget-icon-box blue-box">
+              <Calendar size={18} color="#407ADD" />
+            </div>
+            <div>
+              <h4 className="studio-widget-title">Exam Rescue Mode</h4>
+              <span className="studio-widget-sub">Mid-Semester Sprint</span>
+            </div>
           </div>
           <span className="exam-countdown-chip">20d left</span>
         </div>
@@ -136,12 +138,14 @@ export const DesktopStudioRail = () => {
       <div className="studio-card studio-goal-card">
         <div className="studio-card-top-tape tape-green" />
         <div className="studio-widget-title-row">
-          <div className="widget-icon-box green-box">
-            <Clock size={17} color="#89BC62" />
-          </div>
-          <div>
-            <h4 className="studio-widget-title">Weekly Study Goal</h4>
-            <span className="studio-widget-sub">Semester 4 Target</span>
+          <div className="studio-title-left-group">
+            <div className="widget-icon-box green-box">
+              <Clock size={17} color="#89BC62" />
+            </div>
+            <div>
+              <h4 className="studio-widget-title">Weekly Study Goal</h4>
+              <span className="studio-widget-sub">Semester 4 Target</span>
+            </div>
           </div>
           <span className="goal-pct-chip">{progressPercent}%</span>
         </div>
@@ -174,18 +178,22 @@ export const DesktopStudioRail = () => {
       <div className="studio-card studio-bookmarks-widget">
         <div className="studio-card-top-tape tape-pink" />
         <div className="studio-widget-title-row">
-          <div className="widget-icon-box pink-box">
-            <Bookmark size={17} color="#DD88C1" />
-          </div>
-          <div>
-            <h4 className="studio-widget-title">Quick Bookmarks</h4>
-            <span className="studio-widget-sub">{bookmarks.length} saved resources</span>
+          <div className="studio-title-left-group">
+            <div className="widget-icon-box pink-box">
+              <Bookmark size={17} color="#DD88C1" />
+            </div>
+            <div>
+              <h4 className="studio-widget-title">Quick Bookmarks</h4>
+              <span className="studio-widget-sub">{bookmarks.length} saved resources</span>
+            </div>
           </div>
           <button
             className="btn-text-link tactile-btn"
             onClick={() => navigateTo('collections')}
+            title="View all saved collections"
           >
-            All
+            <span>All</span>
+            <ChevronRight size={13} strokeWidth={2.4} />
           </button>
         </div>
 
@@ -215,12 +223,14 @@ export const DesktopStudioRail = () => {
       {/* 5. Live Campus Community Pulse */}
       <div className="studio-card studio-pulse-card">
         <div className="studio-widget-title-row">
-          <div className="widget-icon-box green-box">
-            <Sparkles size={16} color="#89BC62" />
-          </div>
-          <div>
-            <h4 className="studio-widget-title">Campus Pulse</h4>
-            <span className="studio-widget-sub">Live Peer Activity</span>
+          <div className="studio-title-left-group">
+            <div className="widget-icon-box green-box">
+              <Sparkles size={16} color="#89BC62" />
+            </div>
+            <div>
+              <h4 className="studio-widget-title">Campus Pulse</h4>
+              <span className="studio-widget-sub">Live Peer Activity</span>
+            </div>
           </div>
         </div>
 
