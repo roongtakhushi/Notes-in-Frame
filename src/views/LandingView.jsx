@@ -19,7 +19,7 @@ const FourPointStar = ({ size = 16, color = '#DD88C1', className = '' }) => (
 );
 
 export const LandingView = () => {
-  const { navigateTo, isLoggedOut, setIsAuthModalOpen } = useApp();
+  const { navigateTo, isLoggedOut, setIsAuthModalOpen, enterAsGuest } = useApp();
 
   const handleGetStarted = () => {
     setIsAuthModalOpen(true);
@@ -181,7 +181,7 @@ export const LandingView = () => {
             <button
               type="button"
               className="btn-guest-browse tactile-btn"
-              onClick={() => navigateTo('home')}
+              onClick={enterAsGuest}
               title="Browse campus notes repository directly without login"
             >
               <span>Browse Notes as Guest</span>

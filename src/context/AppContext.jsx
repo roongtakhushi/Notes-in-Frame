@@ -83,6 +83,8 @@ export const AppProvider = ({ children }) => {
 
   // 6. Navigation and History Stack
   // Views: 'landing' | 'onboarding' | 'home' | 'explore' | 'detail' | 'exam-rescue' | 'collections' | 'upload' | 'profile' | 'bookmarks' | 'my-uploads' | 'settings'
+  const VALID_VIEWS = ['home', 'explore', 'detail', 'exam-rescue', 'collections', 'upload', 'profile', 'bookmarks', 'my-uploads', 'settings', 'onboarding'];
+
   const [isLoggedOut, setIsLoggedOut] = useState(() => {
     try {
       return localStorage.getItem('nif_auth_logged_out') === 'true';
@@ -97,18 +99,34 @@ export const AppProvider = ({ children }) => {
       if (loggedOut) {
         return 'landing';
       }
+      const savedView = localStorage.getItem('nif_current_view');
+      if (savedView && VALID_VIEWS.includes(savedView)) {
+        return savedView;
+      }
       const seen = localStorage.getItem('nif_onboarding_seen');
       return seen ? 'home' : 'landing';
     } catch (e) {
       return 'landing';
     }
   });
-  const [selectedResourceId, setSelectedResourceId] = useState('nif-01');
+
+  const [selectedResourceId, setSelectedResourceId] = useState(() => {
+    try {
+      return localStorage.getItem('nif_selected_resource_id') || 'nif-01';
+    } catch (e) {
+      return 'nif-01';
+    }
+  });
+
   const [historyStack, setHistoryStack] = useState(() => {
     try {
       const loggedOut = localStorage.getItem('nif_auth_logged_out') === 'true';
       if (loggedOut) {
         return ['landing'];
+      }
+      const savedView = localStorage.getItem('nif_current_view');
+      if (savedView && VALID_VIEWS.includes(savedView)) {
+        return savedView === 'home' ? ['home'] : ['home', savedView];
       }
       const seen = localStorage.getItem('nif_onboarding_seen');
       return seen ? ['home'] : ['landing'];
@@ -358,30 +376,52 @@ export const AppProvider = ({ children }) => {
   const navigateTo = (view, resourceId = null) => {
     if (view === 'detail' && resourceId) {
       setSelectedResourceId(resourceId);
+      try {
+        localStorage.setItem('nif_selected_resource_id', resourceId);
+      } catch (e) {}
     }
     setHistoryStack(prev => [...prev, view]);
     setCurrentView(view);
+    try {
+      localStorage.setItem('nif_current_view', view);
+      if (view !== 'landing') {
+        localStorage.setItem('nif_onboarding_seen', 'true');
+        localStorage.removeItem('nif_auth_logged_out');
+        setIsLoggedOut(false);
+      }
+    } catch (e) {}
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateBack = () => {
+    let targetView = 'home';
     if (historyStack.length > 1) {
       const newStack = [...historyStack];
       newStack.pop(); // Remove current
-      const prevView = newStack[newStack.length - 1];
+      targetView = newStack[newStack.length - 1];
       setHistoryStack(newStack);
-      setCurrentView(prevView);
+      setCurrentView(targetView);
     } else {
-      const fallbackView = isLoggedOut ? 'landing' : 'home';
-      setCurrentView(fallbackView);
-      setHistoryStack([fallbackView]);
+      targetView = isLoggedOut ? 'landing' : 'home';
+      setCurrentView(targetView);
+      setHistoryStack([targetView]);
     }
+    try {
+      localStorage.setItem('nif_current_view', targetView);
+    } catch (e) {}
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Open note details while preserving navigation origin
   const openNoteDetail = (id) => {
     setSelectedResourceId(id);
+    try {
+      localStorage.setItem('nif_selected_resource_id', id);
+      localStorage.setItem('nif_current_view', 'detail');
+      localStorage.setItem('nif_onboarding_seen', 'true');
+      localStorage.removeItem('nif_auth_logged_out');
+      setIsLoggedOut(false);
+    } catch (e) {}
     setHistoryStack(prev => [...prev, 'detail']);
     setCurrentView('detail');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -618,6 +658,7 @@ Campus Notes Hub Challenge - SASC PixelRush
   const logoutUser = () => {
     try {
       localStorage.setItem('nif_auth_logged_out', 'true');
+      localStorage.setItem('nif_current_view', 'landing');
     } catch (e) {
       console.warn('LocalStorage error saving auth state', e);
     }
@@ -639,6 +680,8 @@ Campus Notes Hub Challenge - SASC PixelRush
   const loginUser = (customProfile = null) => {
     try {
       localStorage.removeItem('nif_auth_logged_out');
+      localStorage.setItem('nif_onboarding_seen', 'true');
+      localStorage.setItem('nif_current_view', 'home');
       if (customProfile) {
         localStorage.setItem('nif_auth_user', JSON.stringify(customProfile));
         setCurrentUser(customProfile);
@@ -656,6 +699,25 @@ Campus Notes Hub Challenge - SASC PixelRush
       title: `Welcome, ${studentName}! 🎓`,
       description: 'Your campus study workstation is active and synchronized.',
       type: 'success'
+    });
+  };
+
+  const enterAsGuest = () => {
+    try {
+      localStorage.removeItem('nif_auth_logged_out');
+      localStorage.setItem('nif_onboarding_seen', 'true');
+      localStorage.setItem('nif_current_view', 'home');
+    } catch (e) {
+      console.warn('LocalStorage error in guest mode', e);
+    }
+    setIsLoggedOut(false);
+    setCurrentView('home');
+    setHistoryStack(['home']);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    showToast({
+      title: 'Campus Notes Hub Active 📚',
+      description: 'Browsing MIT Alandi notes repository as guest. Welcome!',
+      type: 'info'
     });
   };
 
@@ -698,6 +760,7 @@ Campus Notes Hub Challenge - SASC PixelRush
         markAllNotificationsAsRead,
         logoutUser,
         loginUser,
+        enterAsGuest,
         navigateTo,
         navigateBack,
         openNoteDetail,

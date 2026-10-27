@@ -7495,20 +7495,25 @@ body.paper-texture-mode {
    ========================================================= */
 .home-studio-bento-dock {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-  margin: 1.25rem 0 1.75rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 768px) {
   .home-studio-bento-dock {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+    margin: 1.25rem 0 1.75rem;
   }
 }
 
 @media (min-width: 1024px) {
   .home-studio-bento-dock {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -7517,11 +7522,22 @@ body.paper-texture-mode {
   background: #FFFFFF;
   border: 1.5px solid #1A1A1A;
   border-radius: 14px;
-  padding: 16px 18px 14px;
+  padding: 14px 14px 12px;
   box-shadow: 2px 2px 0px #1A1A1A;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@media (min-width: 640px) {
+  .cockpit-card {
+    padding: 16px 18px 14px;
+  }
 }
 
 .cockpit-tape {
@@ -7536,27 +7552,39 @@ body.paper-texture-mode {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 12px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .cockpit-avatar-info {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
 }
 
 .cockpit-student-name {
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 800;
   color: var(--text-primary);
   margin: 0;
   line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cockpit-student-badge {
   font-size: 0.6875rem;
   color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
 }
 
 .cockpit-profile-link {
@@ -7569,23 +7597,35 @@ body.paper-texture-mode {
   border-radius: 6px;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .cockpit-streak-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cockpit-pill {
-  flex: 1;
+  flex: 1 1 125px;
+  min-width: 0;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 6px 8px;
   border-radius: 8px;
   font-size: 0.6875rem;
   color: var(--text-secondary);
+  box-sizing: border-box;
+}
+
+.cockpit-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .cockpit-pill.flame-pill {
@@ -7747,6 +7787,8 @@ body.paper-texture-mode {
 
 .btn-cockpit-resume {
   width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7786,6 +7828,8 @@ body.paper-texture-mode {
   flex-direction: column;
   gap: 6px;
   margin-bottom: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .cockpit-bookmark-row {
@@ -7798,6 +7842,9 @@ body.paper-texture-mode {
   border-radius: 8px;
   cursor: pointer;
   transition: background 0.15s ease;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
 }
 
 .cockpit-bookmark-row:hover {
@@ -7810,6 +7857,8 @@ body.paper-texture-mode {
   align-items: center;
   gap: 8px;
   overflow: hidden;
+  min-width: 0;
+  flex: 1;
 }
 
 .bookmark-type-tag {
@@ -7831,6 +7880,7 @@ body.paper-texture-mode {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  min-width: 0;
 }
 
 .cockpit-pulse-footer {
