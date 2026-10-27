@@ -326,7 +326,7 @@ export const AppProvider = ({ children }) => {
         description: null,
         type: defaultType,
         action: null,
-        duration: 4000
+        duration: 2400
       };
     } else {
       toastObj = {
@@ -335,7 +335,7 @@ export const AppProvider = ({ children }) => {
         description: toastInput.description || null,
         type: toastInput.type || defaultType,
         action: toastInput.action || null,
-        duration: toastInput.duration || 4000
+        duration: toastInput.duration || (toastInput.action ? 3500 : 2400)
       };
     }
 

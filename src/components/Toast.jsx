@@ -15,13 +15,22 @@ import { useApp } from '../context/AppContext';
 const ToastItem = ({ toast, onDismiss }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
+  const [isExiting, setIsExiting] = useState(false);
 
-  const duration = toast.duration || 4000;
+  const duration = toast.duration || (toast.action ? 3500 : 2400);
+
+  const handleDismiss = () => {
+    if (isExiting) return;
+    setIsExiting(true);
+    setTimeout(() => {
+      onDismiss(toast.id);
+    }, 160);
+  };
 
   useEffect(() => {
-    if (isPaused) return;
+    if (isPaused || isExiting) return;
 
-    const interval = 50;
+    const interval = 30;
     const step = (interval / duration) * 100;
 
     const timer = setInterval(() => {
@@ -29,13 +38,13 @@ const ToastItem = ({ toast, onDismiss }) => {
     }, interval);
 
     return () => clearInterval(timer);
-  }, [isPaused, duration]);
+  }, [isPaused, isExiting, duration]);
 
   useEffect(() => {
-    if (progress <= 0) {
-      onDismiss(toast.id);
+    if (progress <= 0 && !isExiting) {
+      handleDismiss();
     }
-  }, [progress, toast.id, onDismiss]);
+  }, [progress, isExiting]);
 
   const getIconAndStyle = () => {
     switch (toast.type) {
@@ -96,10 +105,12 @@ const ToastItem = ({ toast, onDismiss }) => {
 
   return (
     <div
-      className={`production-toast ${toast.type || 'info'}`}
+      className={`production-toast ${toast.type || 'info'} ${isExiting ? 'toast-exiting' : ''}`}
+      onClick={handleDismiss}
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       role="alert"
+      title="Click to dismiss"
     >
       <div className="toast-body-row">
         {/* Leading Icon Badge */}
@@ -125,7 +136,7 @@ const ToastItem = ({ toast, onDismiss }) => {
               onClick={(e) => {
                 e.stopPropagation();
                 if (toast.action.onClick) toast.action.onClick();
-                onDismiss(toast.id);
+                handleDismiss();
               }}
             >
               <span>{toast.action.label}</span>
@@ -137,7 +148,10 @@ const ToastItem = ({ toast, onDismiss }) => {
         <button
           type="button"
           className="toast-dismiss-btn"
-          onClick={() => onDismiss(toast.id)}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleDismiss();
+          }}
           aria-label="Dismiss toast"
         >
           <X size={15} strokeWidth={2.2} />
